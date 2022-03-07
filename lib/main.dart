@@ -1,6 +1,6 @@
 import 'package:coursework_two/pages/aboutPage.dart';
 import 'package:coursework_two/pages/homePage.dart';
-import 'package:coursework_two/state/settingsState.dart';
+import 'package:coursework_two/state/appState.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +11,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  var settingsState = SettingsState();
+  var settingsState = AppState();
   await settingsState.init();
 
   runApp(ChangeNotifierProvider(

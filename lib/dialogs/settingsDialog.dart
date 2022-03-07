@@ -1,5 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
-import 'package:coursework_two/state/settingsState.dart';
+import 'package:coursework_two/state/appState.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,7 +9,7 @@ class SettingsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(children: [
-      Consumer<SettingsState>(builder: (context, settings, child) {
+      Consumer<AppState>(builder: (context, settings, child) {
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [

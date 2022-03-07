@@ -2,7 +2,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coursework_two/components/exercise.dart';
 import 'package:coursework_two/dialogs/exerciseInfoDialog.dart';
-import 'package:coursework_two/state/settingsState.dart';
+import 'package:coursework_two/state/appState.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -49,7 +49,7 @@ class _ExercisesPageState extends State<ExercisesPage> {
                 exerciseModel != null
                     ? Exercise(exerciseModel: exerciseModel)
                     : const SizedBox.shrink(),
-                Consumer<SettingsState>(builder: (context, settings, child) {
+                Consumer<AppState>(builder: (context, settings, child) {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -97,7 +97,7 @@ class _ExercisesPageState extends State<ExercisesPage> {
   }
 
   Future<void> goBackward(
-      SettingsState settingsState, ExerciseModel? exerciseModel) async {
+      AppState settingsState, ExerciseModel? exerciseModel) async {
     if (currentExercise != 0) {
       setState(() {
         currentExercise--;
@@ -120,13 +120,13 @@ class _ExercisesPageState extends State<ExercisesPage> {
     }
   }
 
-  Future<void> goToHomePage(SettingsState settingsState) async {
+  Future<void> goToHomePage(AppState settingsState) async {
     Navigator.pushNamed(context, '/');
     await settingsState.stopAudio();
   }
 
   Future<void> goForward(
-      SettingsState settingsState, ExerciseModel? exerciseModel) async {
+      AppState settingsState, ExerciseModel? exerciseModel) async {
     if (lastExercise != currentExercise) {
       var isLastExercise = currentExercise + 1 == lastExercise;
       setState(() {

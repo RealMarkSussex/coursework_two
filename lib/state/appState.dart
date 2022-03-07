@@ -1,7 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 
-class SettingsState extends ChangeNotifier {
+class AppState extends ChangeNotifier {
   AudioCache audioCache = AudioCache(fixedPlayer: AudioPlayer());
   bool audioEnabled = true;
   double volume = 0.5;

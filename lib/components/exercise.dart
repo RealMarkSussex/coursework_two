@@ -1,5 +1,5 @@
 import 'package:coursework_two/models/exerciseModel.dart';
-import 'package:coursework_two/state/settingsState.dart';
+import 'package:coursework_two/state/appState.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,7 +10,7 @@ class Exercise extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<void>(
-        future: Provider.of<SettingsState>(context, listen: false)
+        future: Provider.of<AppState>(context, listen: false)
             .playAudio(exerciseModel.audio),
         builder: (context, snapshot) {
           return Expanded(
