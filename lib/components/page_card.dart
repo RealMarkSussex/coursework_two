@@ -1,5 +1,5 @@
-import 'package:coursework_two/pages/exercisesPage.dart';
-import 'package:coursework_two/models/cardInfoModel.dart';
+import 'package:coursework_two/pages/exercises_page.dart';
+import 'package:coursework_two/models/card_info_model.dart';
 import 'package:flutter/material.dart';
 
 class PageCard extends StatelessWidget {

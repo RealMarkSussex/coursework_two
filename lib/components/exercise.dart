@@ -1,5 +1,5 @@
-import 'package:coursework_two/models/exerciseModel.dart';
-import 'package:coursework_two/state/appState.dart';
+import 'package:coursework_two/models/exercise_model.dart';
+import 'package:coursework_two/state/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

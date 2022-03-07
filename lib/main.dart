@@ -1,6 +1,6 @@
-import 'package:coursework_two/pages/aboutPage.dart';
-import 'package:coursework_two/pages/homePage.dart';
-import 'package:coursework_two/state/appState.dart';
+import 'package:coursework_two/pages/about_page.dart';
+import 'package:coursework_two/pages/home_page.dart';
+import 'package:coursework_two/state/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';

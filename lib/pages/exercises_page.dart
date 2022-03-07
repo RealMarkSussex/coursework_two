@@ -1,14 +1,16 @@
+import 'dart:async';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coursework_two/components/exercise.dart';
-import 'package:coursework_two/dialogs/exerciseInfoDialog.dart';
-import 'package:coursework_two/state/appState.dart';
+import 'package:coursework_two/dialogs/exercise_info_dialog.dart';
+import 'package:coursework_two/state/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
-import '../components/sunSalutationsAppBar.dart';
-import '../models/exerciseModel.dart';
+import '../components/sun_salutations_app_bar.dart';
+import '../models/exercise_model.dart';
 
 class ExercisesPage extends StatefulWidget {
   final String exerciseType;
@@ -25,11 +27,22 @@ class _ExercisesPageState extends State<ExercisesPage> {
   Color forwardsButtonColor = Colors.blue;
   bool isForwardButtonEnabled = true;
   bool isBackwardButtonEnabled = false;
+  Future<List<ExerciseModel>> _future = Future.value([]);
+
+  @override
+  void initState() {
+    super.initState();
+    _future = getExercises();
+
+    Timer.periodic(const Duration(seconds: 10), (Timer t) async {
+      await goForward();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<ExerciseModel>>(
-        future: getExercises(),
+        future: _future,
         builder: (BuildContext context,
             AsyncSnapshot<List<ExerciseModel>> snapshot) {
           var data = snapshot.data;
@@ -41,7 +54,6 @@ class _ExercisesPageState extends State<ExercisesPage> {
             exerciseModel = data
                 .firstWhere(((element) => element.sequence == currentExercise));
           }
-
           return Scaffold(
             appBar: createAppBar(widget.exerciseType, context),
             body: Column(
@@ -67,8 +79,7 @@ class _ExercisesPageState extends State<ExercisesPage> {
                             color: backwardButtonColor,
                           ),
                           onPressed: isBackwardButtonEnabled
-                              ? () async =>
-                                  await goBackward(settings, exerciseModel)
+                              ? () async => await goBackward()
                               : null),
                       IconButton(
                           // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
@@ -77,8 +88,7 @@ class _ExercisesPageState extends State<ExercisesPage> {
                             color: forwardsButtonColor,
                           ),
                           onPressed: isForwardButtonEnabled
-                              ? () async =>
-                                  await goForward(settings, exerciseModel)
+                              ? () async => await goForward()
                               : null),
                       IconButton(
                         icon: const FaIcon(
@@ -96,8 +106,7 @@ class _ExercisesPageState extends State<ExercisesPage> {
         });
   }
 
-  Future<void> goBackward(
-      AppState settingsState, ExerciseModel? exerciseModel) async {
+  Future<void> goBackward() async {
     if (currentExercise != 0) {
       setState(() {
         currentExercise--;
@@ -106,10 +115,6 @@ class _ExercisesPageState extends State<ExercisesPage> {
         isForwardButtonEnabled = true;
         forwardsButtonColor = Colors.blue;
       });
-
-      if (exerciseModel != null) {
-        await settingsState.playAudio(exerciseModel.audio);
-      }
     }
 
     if (currentExercise == 0) {
@@ -125,8 +130,7 @@ class _ExercisesPageState extends State<ExercisesPage> {
     await settingsState.stopAudio();
   }
 
-  Future<void> goForward(
-      AppState settingsState, ExerciseModel? exerciseModel) async {
+  Future<void> goForward() async {
     if (lastExercise != currentExercise) {
       var isLastExercise = currentExercise + 1 == lastExercise;
       setState(() {
@@ -136,10 +140,6 @@ class _ExercisesPageState extends State<ExercisesPage> {
         isForwardButtonEnabled = !isLastExercise;
         forwardsButtonColor = isLastExercise ? Colors.grey : Colors.blue;
       });
-
-      if (exerciseModel != null) {
-        await settingsState.playAudio(exerciseModel.audio);
-      }
     }
   }
 

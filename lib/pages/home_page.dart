@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:coursework_two/components/pageCard.dart';
-import 'package:coursework_two/components/sunSalutationsAppBar.dart';
-import 'package:coursework_two/models/cardInfoModel.dart';
+import 'package:coursework_two/components/page_card.dart';
+import 'package:coursework_two/components/sun_salutations_app_bar.dart';
+import 'package:coursework_two/models/card_info_model.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
