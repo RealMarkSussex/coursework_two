@@ -1,8 +1,11 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coursework_two/components/exercise.dart';
 import 'package:coursework_two/dialogs/exerciseInfoDialog.dart';
+import 'package:coursework_two/state/settingsState.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 import '../components/sunSalutationsAppBar.dart';
 import '../models/exerciseModel.dart';
@@ -21,8 +24,7 @@ class _ExercisesPageState extends State<ExercisesPage> {
   Color backwardButtonColor = Colors.grey;
   Color forwardsButtonColor = Colors.blue;
   bool isForwardButtonEnabled = true;
-  bool isBackwardButtonEnabled = true;
-
+  bool isBackwardButtonEnabled = false;
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<ExerciseModel>>(
@@ -46,46 +48,52 @@ class _ExercisesPageState extends State<ExercisesPage> {
                 exerciseModel != null
                     ? Exercise(exerciseModel: exerciseModel)
                     : const SizedBox.shrink(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    IconButton(
-                        // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
+                Consumer<SettingsState>(builder: (context, settings, child) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                          // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
+                          icon: const FaIcon(
+                            FontAwesomeIcons.home,
+                            color: Colors.lightGreen,
+                          ),
+                          onPressed: goToHomePage),
+                      IconButton(
+                          // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
+                          icon: FaIcon(
+                            FontAwesomeIcons.angleDoubleLeft,
+                            color: backwardButtonColor,
+                          ),
+                          onPressed: isBackwardButtonEnabled
+                              ? () => goBackward(settings)
+                              : null),
+                      IconButton(
+                          // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
+                          icon: FaIcon(
+                            FontAwesomeIcons.angleDoubleRight,
+                            color: forwardsButtonColor,
+                          ),
+                          onPressed: isForwardButtonEnabled
+                              ? () => goForward(settings)
+                              : null),
+                      IconButton(
                         icon: const FaIcon(
-                          FontAwesomeIcons.home,
-                          color: Colors.lightGreen,
+                          FontAwesomeIcons.question,
+                          color: Colors.amber,
                         ),
-                        onPressed: goToHomePage),
-                    IconButton(
-                        // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
-                        icon: FaIcon(
-                          FontAwesomeIcons.angleDoubleLeft,
-                          color: backwardButtonColor,
-                        ),
-                        onPressed: isBackwardButtonEnabled ? goBackward : null),
-                    IconButton(
-                        // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
-                        icon: FaIcon(
-                          FontAwesomeIcons.angleDoubleRight,
-                          color: forwardsButtonColor,
-                        ),
-                        onPressed: isForwardButtonEnabled ? goForward : null),
-                    IconButton(
-                      icon: const FaIcon(
-                        FontAwesomeIcons.question,
-                        color: Colors.amber,
-                      ),
-                      onPressed: () => openInformation(exerciseModel),
-                    )
-                  ],
-                )
+                        onPressed: () => openInformation(exerciseModel),
+                      )
+                    ],
+                  );
+                })
               ],
             ),
           );
         });
   }
 
-  void goBackward() {
+  Future<void> goBackward(SettingsState settingsState) async {
     if (currentExercise != 0) {
       setState(() {
         currentExercise--;
@@ -94,7 +102,10 @@ class _ExercisesPageState extends State<ExercisesPage> {
         isForwardButtonEnabled = true;
         forwardsButtonColor = Colors.blue;
       });
-    } else {
+      await settingsState.playAudio('introduction.mp3');
+    }
+
+    if (currentExercise == 0) {
       setState(() {
         backwardButtonColor = Colors.grey;
         isBackwardButtonEnabled = false;
@@ -106,20 +117,17 @@ class _ExercisesPageState extends State<ExercisesPage> {
     Navigator.pushNamed(context, '/');
   }
 
-  void goForward() {
+  Future<void> goForward(SettingsState settingsState) async {
     if (lastExercise != currentExercise) {
+      var isLastExercise = currentExercise + 1 == lastExercise;
       setState(() {
         currentExercise++;
         backwardButtonColor = Colors.blue;
         isBackwardButtonEnabled = true;
-        isForwardButtonEnabled = true;
-        forwardsButtonColor = Colors.blue;
+        isForwardButtonEnabled = !isLastExercise;
+        forwardsButtonColor = isLastExercise ? Colors.grey : Colors.blue;
       });
-    } else {
-      setState(() {
-        forwardsButtonColor = Colors.grey;
-        isForwardButtonEnabled = false;
-      });
+      await settingsState.playAudio('introduction.mp3');
     }
   }
 

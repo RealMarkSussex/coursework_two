@@ -1,3 +1,4 @@
+import 'package:coursework_two/dialogs/settingsDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -13,7 +14,17 @@ AppBar createAppBar(String title, BuildContext context) {
         onPressed: () {
           Navigator.pushNamed(context, '/about');
         },
-      )
+      ),
+      IconButton(
+        icon: const FaIcon(FontAwesomeIcons.wrench),
+        tooltip: 'Settings',
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (context) =>
+                  const SettingsDialog());
+        },
+      ),
     ],
   );
 }
