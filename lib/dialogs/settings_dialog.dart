@@ -1,15 +1,21 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:coursework_two/enums/timer_setting.dart';
 import 'package:coursework_two/state/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
-class SettingsDialog extends StatelessWidget {
-  final Function callback;
+class SettingsDialog extends StatefulWidget {
+  final Function(TimerSetting?)? callback;
   const SettingsDialog({Key? key, required this.callback}) : super(key: key);
   static const paragraphSpacing = 20.0;
   static const textSpacing = 20.0;
+
+  @override
+  State<SettingsDialog> createState() => _SettingsDialogState();
+}
+
+class _SettingsDialogState extends State<SettingsDialog> {
+  TimerSetting timerSetting = TimerSetting.noTimer;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +30,7 @@ class SettingsDialog extends StatelessWidget {
                 children: [
                   const Text("Enable audio"),
                   const SizedBox(
-                    width: textSpacing,
+                    width: SettingsDialog.textSpacing,
                   ),
                   Expanded(
                     child: Switch(
@@ -37,7 +43,7 @@ class SettingsDialog extends StatelessWidget {
                 children: [
                   const Text("Change Volume"),
                   const SizedBox(
-                    width: textSpacing,
+                    width: SettingsDialog.textSpacing,
                   ),
                   Expanded(
                     child: Slider(
@@ -46,47 +52,48 @@ class SettingsDialog extends StatelessWidget {
                   )
                 ],
               ),
-              Row(children: [
-                const Text("Adjust tempo"),
-                const SizedBox(
-                  width: textSpacing,
-                ),
-                Expanded(
-                  child: DropdownButton<TimerSetting>(
-                      value: settings.timerSetting,
-                      items: const [
-                        DropdownMenuItem<TimerSetting>(
-                          child: Text("No timer"),
-                          value: TimerSetting.noTimer,
+              widget.callback != null
+                  ? Row(children: [
+                      const Text("Adjust tempo"),
+                      const SizedBox(
+                        width: SettingsDialog.textSpacing,
+                      ),
+                      Expanded(
+                        child: DropdownButton<TimerSetting>(
+                            value: timerSetting,
+                            items: const [
+                              DropdownMenuItem<TimerSetting>(
+                                child: Text("No timer"),
+                                value: TimerSetting.noTimer,
+                              ),
+                              DropdownMenuItem<TimerSetting>(
+                                child: Text("20 seconds"),
+                                value: TimerSetting.twentySeconds,
+                              ),
+                              DropdownMenuItem<TimerSetting>(
+                                child: Text("40 seconds"),
+                                value: TimerSetting.fourtySeconds,
+                              ),
+                              DropdownMenuItem<TimerSetting>(
+                                child: Text("1 minute"),
+                                value: TimerSetting.oneMinute,
+                              ),
+                              DropdownMenuItem<TimerSetting>(
+                                child: Text("2 minutes"),
+                                value: TimerSetting.twoMinutes,
+                              )
+                            ],
+                            onChanged: onTimerSettingUpdate),
+                      ),
+                      IconButton(
+                        onPressed: () => openHelp(context),
+                        icon: const FaIcon(
+                          FontAwesomeIcons.infoCircle,
+                          color: Colors.amber,
                         ),
-                        DropdownMenuItem<TimerSetting>(
-                          child: Text("20 seconds"),
-                          value: TimerSetting.twentySeconds,
-                        ),
-                        DropdownMenuItem<TimerSetting>(
-                          child: Text("40 seconds"),
-                          value: TimerSetting.fourtySeconds,
-                        ),
-                        DropdownMenuItem<TimerSetting>(
-                          child: Text("1 minute"),
-                          value: TimerSetting.oneMinute,
-                        ),
-                        DropdownMenuItem<TimerSetting>(
-                          child: Text("2 minutes"),
-                          value: TimerSetting.twoMinutes,
-                        )
-                      ],
-                      onChanged: (e) =>
-                          settings.updateTimerSetting(e, callback)),
-                ),
-                IconButton(
-                  onPressed: () => openHelp(context),
-                  icon: const FaIcon(
-                    FontAwesomeIcons.infoCircle,
-                    color: Colors.amber,
-                  ),
-                )
-              ])
+                      )
+                    ])
+                  : const SizedBox.shrink()
             ],
           ),
         );
@@ -105,16 +112,16 @@ class SettingsDialog extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const Text('Timer Settings Help'),
-                  const SizedBox(height: paragraphSpacing),
+                  const SizedBox(height: SettingsDialog.paragraphSpacing),
                   const Text(
                       'This is for automatically scrolling through the exercises without lifting a finger.'),
-                  const SizedBox(height: paragraphSpacing),
+                  const SizedBox(height: SettingsDialog.paragraphSpacing),
                   const Align(
                     child: Text(
                         'By default this is set to no timer meaning scrolling won\'t happen automatically.'),
                     alignment: Alignment.centerLeft,
                   ),
-                  const SizedBox(height: paragraphSpacing),
+                  const SizedBox(height: SettingsDialog.paragraphSpacing),
                   const Text(
                       'If you decide to go at 20 seconds speed you will not have audio instructions.'),
                   TextButton(
@@ -126,5 +133,14 @@ class SettingsDialog extends StatelessWidget {
             )
           ]);
         });
+  }
+
+  void onTimerSettingUpdate(TimerSetting? timerSetting) {
+    widget.callback!(timerSetting);
+    setState(() {
+      if (timerSetting != null) {
+        this.timerSetting = timerSetting;
+      }
+    });
   }
 }

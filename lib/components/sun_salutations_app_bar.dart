@@ -1,8 +1,10 @@
 import 'package:coursework_two/dialogs/settings_dialog.dart';
+import 'package:coursework_two/enums/timer_setting.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-AppBar createAppBar(String title, BuildContext context, Function callback) {
+AppBar createAppBar(
+    String title, BuildContext context, Function(TimerSetting?)? callback) {
   return AppBar(
     title: Text(title),
     backgroundColor: Colors.deepOrange,
@@ -21,7 +23,9 @@ AppBar createAppBar(String title, BuildContext context, Function callback) {
         onPressed: () {
           showDialog(
               context: context,
-              builder: (context) => SettingsDialog(callback: callback));
+              builder: (context) => SettingsDialog(
+                    callback: callback,
+                  ));
         },
       ),
     ],

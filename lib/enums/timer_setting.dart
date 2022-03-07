@@ -7,7 +7,7 @@ enum TimerSetting {
 }
 
 extension ParseToTimerValue on TimerSetting {
-  int toNumber() {
+  int toInt() {
     var timerMappings = <TimerSetting, int>{
       TimerSetting.noTimer: 0,
       TimerSetting.twentySeconds: 20,

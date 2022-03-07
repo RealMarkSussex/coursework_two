@@ -7,6 +7,7 @@ class Exercise extends StatelessWidget {
   final ExerciseModel exerciseModel;
   const Exercise({Key? key, required this.exerciseModel}) : super(key: key);
 
+  //Provider.of<AppState>(context, listen: false).playAudio(exerciseModel.audio)
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<void>(

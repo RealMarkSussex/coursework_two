@@ -4,9 +4,14 @@ import 'package:coursework_two/components/sun_salutations_app_bar.dart';
 import 'package:coursework_two/models/card_info_model.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<CardInfoModel>>(
@@ -16,7 +21,7 @@ class HomePage extends StatelessWidget {
           var data = snapshot.data;
           data ??= [];
           return Scaffold(
-              appBar: createAppBar('Sun Salutatons', context, () => {}),
+              appBar: createAppBar('Sun Salutatons', context, null),
               body: Center(
                   child: ListView(
                 scrollDirection: Axis.vertical,

@@ -21,28 +21,53 @@ class ExercisesPage extends StatefulWidget {
   State<ExercisesPage> createState() => _ExercisesPageState();
 }
 
-class _ExercisesPageState extends State<ExercisesPage> {
+class _ExercisesPageState extends State<ExercisesPage>
+    with TickerProviderStateMixin {
   int currentExercise = 0;
   int lastExercise = 0;
+
   Color backwardButtonColor = Colors.grey;
   Color forwardsButtonColor = Colors.blue;
   bool isForwardButtonEnabled = true;
   bool isBackwardButtonEnabled = false;
+  TimerSetting timerSetting = TimerSetting.noTimer;
+  double progress = 0;
   Future<List<ExerciseModel>> _future = Future.value([]);
+  Timer _delayTimer = Timer(const Duration(seconds: 0), () {});
+  Timer _progressTimer = Timer(const Duration(seconds: 0), () {});
 
   @override
   void initState() {
-    super.initState();
     _future = getExercises();
-    if (Provider.of<AppState>(context, listen: false).timerSetting !=
-        TimerSetting.noTimer) {
-      Timer.periodic(
-          Duration(
-              seconds: Provider.of<AppState>(context, listen: false)
-                  .timerValue), (Timer t) async {
-        await goForward();
+
+    super.initState();
+  }
+
+  void initTimers(TimerSetting? timerSetting) {
+    if (timerSetting != null) {
+      var timerValue = timerSetting.toInt();
+      setState(() {
+        progress = 0;
+        this.timerSetting = timerSetting;
+        _progressTimer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
+          progress += 1 / timerValue;
+        });
+        _delayTimer = Timer.periodic(
+            Duration(seconds: (timerSetting.toInt())),
+            (Timer t) async => {
+                  if (timerValue != 0 && timerSetting != TimerSetting.noTimer)
+                    {await goForward()}
+                });
       });
     }
+  }
+
+  void cancelTimers() {
+    setState(() {
+      _delayTimer.cancel();
+      _progressTimer.cancel();
+      progress = 0.0;
+    });
   }
 
   @override
@@ -61,25 +86,29 @@ class _ExercisesPageState extends State<ExercisesPage> {
                 .firstWhere(((element) => element.sequence == currentExercise));
           }
           return Scaffold(
-            appBar: createAppBar(widget.exerciseType, context, goForward),
+            appBar: createAppBar(widget.exerciseType, context, updateTimer),
             body: Column(
               children: [
                 exerciseModel != null
                     ? Exercise(exerciseModel: exerciseModel)
+                    : const SizedBox.shrink(),
+                timerSetting != TimerSetting.noTimer
+                    ? LinearProgressIndicator(
+                        value: progress,
+                        semanticsLabel: 'Linear progress indicator',
+                      )
                     : const SizedBox.shrink(),
                 Consumer<AppState>(builder: (context, settings, child) {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       IconButton(
-                          // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
                           icon: const FaIcon(
                             FontAwesomeIcons.home,
                             color: Colors.lightGreen,
                           ),
                           onPressed: () async => await goToHomePage(settings)),
                       IconButton(
-                          // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
                           icon: FaIcon(
                             FontAwesomeIcons.angleDoubleLeft,
                             color: backwardButtonColor,
@@ -88,7 +117,6 @@ class _ExercisesPageState extends State<ExercisesPage> {
                               ? () async => await goBackward()
                               : null),
                       IconButton(
-                          // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
                           icon: FaIcon(
                             FontAwesomeIcons.angleDoubleRight,
                             color: forwardsButtonColor,
@@ -113,6 +141,7 @@ class _ExercisesPageState extends State<ExercisesPage> {
   }
 
   Future<void> goBackward() async {
+    cancelTimers();
     if (currentExercise != 0) {
       setState(() {
         currentExercise--;
@@ -129,9 +158,12 @@ class _ExercisesPageState extends State<ExercisesPage> {
         isBackwardButtonEnabled = false;
       });
     }
+
+    initTimers(timerSetting);
   }
 
   Future<void> goToHomePage(AppState settingsState) async {
+    cancelTimers();
     Navigator.pushNamed(context, '/');
     await settingsState.stopAudio();
   }
@@ -149,7 +181,12 @@ class _ExercisesPageState extends State<ExercisesPage> {
     }
   }
 
+  void updateTimer(TimerSetting? timerSetting) {
+    initTimers(timerSetting);
+  }
+
   void openInformation(ExerciseModel? exerciseModel) {
+    cancelTimers();
     if (exerciseModel != null) {
       showDialog(
           context: context,
