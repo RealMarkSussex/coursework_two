@@ -2,7 +2,7 @@ import 'package:coursework_two/dialogs/settings_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-AppBar createAppBar(String title, BuildContext context) {
+AppBar createAppBar(String title, BuildContext context, Function callback) {
   return AppBar(
     title: Text(title),
     backgroundColor: Colors.deepOrange,
@@ -21,8 +21,7 @@ AppBar createAppBar(String title, BuildContext context) {
         onPressed: () {
           showDialog(
               context: context,
-              builder: (context) =>
-                  const SettingsDialog());
+              builder: (context) => SettingsDialog(callback: callback));
         },
       ),
     ],

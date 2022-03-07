@@ -16,7 +16,7 @@ class HomePage extends StatelessWidget {
           var data = snapshot.data;
           data ??= [];
           return Scaffold(
-              appBar: createAppBar('Sun Salutatons', context),
+              appBar: createAppBar('Sun Salutatons', context, () => {}),
               body: Center(
                   child: ListView(
                 scrollDirection: Axis.vertical,

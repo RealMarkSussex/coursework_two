@@ -4,6 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coursework_two/components/exercise.dart';
 import 'package:coursework_two/dialogs/exercise_info_dialog.dart';
+import 'package:coursework_two/enums/timer_setting.dart';
 import 'package:coursework_two/state/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -33,10 +34,15 @@ class _ExercisesPageState extends State<ExercisesPage> {
   void initState() {
     super.initState();
     _future = getExercises();
-
-    Timer.periodic(const Duration(seconds: 10), (Timer t) async {
-      await goForward();
-    });
+    if (Provider.of<AppState>(context, listen: false).timerSetting !=
+        TimerSetting.noTimer) {
+      Timer.periodic(
+          Duration(
+              seconds: Provider.of<AppState>(context, listen: false)
+                  .timerValue), (Timer t) async {
+        await goForward();
+      });
+    }
   }
 
   @override
@@ -55,7 +61,7 @@ class _ExercisesPageState extends State<ExercisesPage> {
                 .firstWhere(((element) => element.sequence == currentExercise));
           }
           return Scaffold(
-            appBar: createAppBar(widget.exerciseType, context),
+            appBar: createAppBar(widget.exerciseType, context, goForward),
             body: Column(
               children: [
                 exerciseModel != null
