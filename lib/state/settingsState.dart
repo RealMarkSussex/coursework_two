@@ -6,6 +6,11 @@ class SettingsState extends ChangeNotifier {
   bool audioEnabled = true;
   double volume = 0.5;
 
+  Future<void> init() async {
+    await audioCache.fixedPlayer!.setVolume(volume);
+    notifyListeners();
+  }
+
   Future<void> changeVolume(double volume) async {
     this.volume = volume;
     await audioCache.fixedPlayer!.setVolume(volume);

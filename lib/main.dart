@@ -11,8 +11,11 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  var settingsState = SettingsState();
+  await settingsState.init();
+
   runApp(ChangeNotifierProvider(
-      create: (context) => SettingsState(), child: const MyApp()));
+      create: (context) => settingsState, child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

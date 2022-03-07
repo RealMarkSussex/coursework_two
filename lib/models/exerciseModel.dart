@@ -6,9 +6,11 @@ class ExerciseModel {
   final String process;
   final int sequence;
   final String audio;
+  final String benefits;
 
   ExerciseModel(
       {required this.name,
+      required this.benefits,
       required this.breathing,
       required this.image,
       required this.precaution,
@@ -24,9 +26,10 @@ class ExerciseModel {
             precaution: json['precaution']! as String,
             process: json['process']! as String,
             sequence: json['sequence'] as int,
-            audio: json['audio']! as String);
+            audio: json['audio']! as String,
+            benefits: json['benefits']! as String);
 
   bool isInfoEmpty() {
-    return breathing == "-" && precaution == "-";
+    return breathing == "-" && precaution == "-" && breathing == "-";
   }
 }
