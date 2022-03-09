@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           var data = snapshot.data;
           data ??= [];
           return Scaffold(
-              appBar: createAppBar('Sun Salutatons', context, null),
+              appBar: createAppBar('Sun Salutatons', context),
               body: Center(
                   child: ListView(
                 scrollDirection: Axis.vertical,

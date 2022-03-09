@@ -1,24 +1,19 @@
 import 'package:coursework_two/enums/timer_setting.dart';
-import 'package:coursework_two/state/app_state.dart';
+import 'package:coursework_two/state/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
-class SettingsDialog extends StatefulWidget {
-  final Function(TimerSetting?, AppState)? callback;
-  const SettingsDialog({Key? key, required this.callback}) : super(key: key);
+class SettingsDialog extends StatelessWidget {
   static const paragraphSpacing = 20.0;
   static const textSpacing = 20.0;
 
-  @override
-  State<SettingsDialog> createState() => _SettingsDialogState();
-}
+  const SettingsDialog({Key? key}) : super(key: key);
 
-class _SettingsDialogState extends State<SettingsDialog> {
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(children: [
-      Consumer<AppState>(builder: (context, settings, child) {
+      Consumer<SettingsState>(builder: (context, settingsState, child) {
         return Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -32,8 +27,9 @@ class _SettingsDialogState extends State<SettingsDialog> {
                   ),
                   Expanded(
                     child: Switch(
-                        value: settings.audioEnabled,
-                        onChanged: settings.toggleAudioPreference),
+                        value: settingsState.audioEnabled,
+                        onChanged: (value) => settingsState.audioEnabled =
+                            !settingsState.audioEnabled),
                   )
                 ],
               ),
@@ -45,54 +41,52 @@ class _SettingsDialogState extends State<SettingsDialog> {
                   ),
                   Expanded(
                     child: Slider(
-                        value: settings.volume,
-                        onChanged: settings.changeVolume),
+                        value: settingsState.volume,
+                        onChanged: (value) => settingsState.volume = value),
                   )
                 ],
               ),
-              widget.callback != null
-                  ? Row(children: [
-                      const Text("Adjust tempo"),
-                      const SizedBox(
-                        width: SettingsDialog.textSpacing,
-                      ),
-                      Expanded(
-                        child: DropdownButton<TimerSetting>(
-                            value: settings.timerSetting,
-                            items: const [
-                              DropdownMenuItem<TimerSetting>(
-                                child: Text("No timer"),
-                                value: TimerSetting.noTimer,
-                              ),
-                              DropdownMenuItem<TimerSetting>(
-                                child: Text("20 seconds"),
-                                value: TimerSetting.twentySeconds,
-                              ),
-                              DropdownMenuItem<TimerSetting>(
-                                child: Text("40 seconds"),
-                                value: TimerSetting.fourtySeconds,
-                              ),
-                              DropdownMenuItem<TimerSetting>(
-                                child: Text("1 minute"),
-                                value: TimerSetting.oneMinute,
-                              ),
-                              DropdownMenuItem<TimerSetting>(
-                                child: Text("2 minutes"),
-                                value: TimerSetting.twoMinutes,
-                              )
-                            ],
-                            onChanged: (timerSetting) =>
-                                onTimerSettingUpdate(timerSetting, settings)),
-                      ),
-                      IconButton(
-                        onPressed: () => openHelp(context),
-                        icon: const FaIcon(
-                          FontAwesomeIcons.infoCircle,
-                          color: Colors.amber,
+              Row(children: [
+                const Text("Adjust tempo"),
+                const SizedBox(
+                  width: SettingsDialog.textSpacing,
+                ),
+                Expanded(
+                  child: DropdownButton<TimerSetting>(
+                      value: settingsState.timerSetting,
+                      items: const [
+                        DropdownMenuItem<TimerSetting>(
+                          child: Text("No timer"),
+                          value: TimerSetting.noTimer,
                         ),
-                      )
-                    ])
-                  : const SizedBox.shrink()
+                        DropdownMenuItem<TimerSetting>(
+                          child: Text("20 seconds"),
+                          value: TimerSetting.twentySeconds,
+                        ),
+                        DropdownMenuItem<TimerSetting>(
+                          child: Text("40 seconds"),
+                          value: TimerSetting.fourtySeconds,
+                        ),
+                        DropdownMenuItem<TimerSetting>(
+                          child: Text("1 minute"),
+                          value: TimerSetting.oneMinute,
+                        ),
+                        DropdownMenuItem<TimerSetting>(
+                          child: Text("2 minutes"),
+                          value: TimerSetting.twoMinutes,
+                        )
+                      ],
+                      onChanged: (value) =>
+                          settingsState.timerSetting = value!),
+                ),
+                IconButton(
+                  onPressed: () => openHelp(context),
+                  icon: const FaIcon(
+                    FontAwesomeIcons.infoCircle,
+                    color: Colors.amber,
+                  ),
+                )
+              ])
             ],
           ),
         );
@@ -132,11 +126,5 @@ class _SettingsDialogState extends State<SettingsDialog> {
             )
           ]);
         });
-  }
-
-  void onTimerSettingUpdate(
-      TimerSetting? timerSetting, AppState settingsState) {
-    widget.callback!(timerSetting, settingsState);
-    settingsState.updateTimerSetting(timerSetting);
   }
 }

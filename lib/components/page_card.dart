@@ -1,6 +1,8 @@
 import 'package:coursework_two/pages/exercises_page.dart';
 import 'package:coursework_two/models/card_info_model.dart';
+import 'package:coursework_two/state/exercise_state.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PageCard extends StatelessWidget {
   final CardInfoModel cardInfoModel;
@@ -30,31 +32,35 @@ class PageCard extends StatelessWidget {
               style: const TextStyle(fontSize: paragraphFontSize),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(primary: Colors.lightBlue),
-                    onPressed: infoPage,
-                    child: const Text(
-                      "Info",
-                      style: TextStyle(fontSize: buttonFontSize),
-                    )),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(primary: Colors.lightGreen),
-                    onPressed: () => {startPage(context)},
-                    child: const Text(
-                      "Start",
-                      style: TextStyle(fontSize: buttonFontSize),
-                    )),
-              ),
-            ],
-          )
+          Consumer<ExerciseState>(builder: (context, exerciseState, child) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                      style:
+                          ElevatedButton.styleFrom(primary: Colors.lightBlue),
+                      onPressed: infoPage,
+                      child: const Text(
+                        "Info",
+                        style: TextStyle(fontSize: buttonFontSize),
+                      )),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                      style:
+                          ElevatedButton.styleFrom(primary: Colors.lightGreen),
+                      onPressed: () => {startPage(context, exerciseState)},
+                      child: const Text(
+                        "Start",
+                        style: TextStyle(fontSize: buttonFontSize),
+                      )),
+                ),
+              ],
+            );
+          })
         ],
       )),
     );
@@ -62,9 +68,10 @@ class PageCard extends StatelessWidget {
 
   void infoPage() {}
 
-  void startPage(BuildContext context) {
+  void startPage(BuildContext context, ExerciseState exerciseState) {
+    exerciseState.exerciseType = cardInfoModel.name;
     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      return ExercisesPage(exerciseType: cardInfoModel.name);
+      return const ExercisesPage();
     }));
   }
 }
