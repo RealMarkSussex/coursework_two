@@ -5,7 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 class SettingsDialog extends StatefulWidget {
-  final Function(TimerSetting?)? callback;
+  final Function(TimerSetting?, AppState)? callback;
   const SettingsDialog({Key? key, required this.callback}) : super(key: key);
   static const paragraphSpacing = 20.0;
   static const textSpacing = 20.0;
@@ -15,8 +15,6 @@ class SettingsDialog extends StatefulWidget {
 }
 
 class _SettingsDialogState extends State<SettingsDialog> {
-  TimerSetting timerSetting = TimerSetting.noTimer;
-
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(children: [
@@ -60,7 +58,7 @@ class _SettingsDialogState extends State<SettingsDialog> {
                       ),
                       Expanded(
                         child: DropdownButton<TimerSetting>(
-                            value: timerSetting,
+                            value: settings.timerSetting,
                             items: const [
                               DropdownMenuItem<TimerSetting>(
                                 child: Text("No timer"),
@@ -83,7 +81,8 @@ class _SettingsDialogState extends State<SettingsDialog> {
                                 value: TimerSetting.twoMinutes,
                               )
                             ],
-                            onChanged: onTimerSettingUpdate),
+                            onChanged: (timerSetting) =>
+                                onTimerSettingUpdate(timerSetting, settings)),
                       ),
                       IconButton(
                         onPressed: () => openHelp(context),
@@ -135,12 +134,9 @@ class _SettingsDialogState extends State<SettingsDialog> {
         });
   }
 
-  void onTimerSettingUpdate(TimerSetting? timerSetting) {
-    widget.callback!(timerSetting);
-    setState(() {
-      if (timerSetting != null) {
-        this.timerSetting = timerSetting;
-      }
-    });
+  void onTimerSettingUpdate(
+      TimerSetting? timerSetting, AppState settingsState) {
+    widget.callback!(timerSetting, settingsState);
+    settingsState.updateTimerSetting(timerSetting);
   }
 }

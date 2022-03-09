@@ -31,8 +31,8 @@ class _ExercisesPageState extends State<ExercisesPage>
   bool isForwardButtonEnabled = true;
   bool isBackwardButtonEnabled = false;
   TimerSetting timerSetting = TimerSetting.noTimer;
-  double progress = 0;
   Future<List<ExerciseModel>> _future = Future.value([]);
+  List<ExerciseModel> exerciseModels = [];
   Timer _delayTimer = Timer(const Duration(seconds: 0), () {});
   late AnimationController anim =
       AnimationController(vsync: this, duration: Duration(seconds: 1))
@@ -45,11 +45,10 @@ class _ExercisesPageState extends State<ExercisesPage>
     super.initState();
   }
 
-  void initTimers(TimerSetting? timerSetting) {
+  void initTimers(TimerSetting? timerSetting, AppState settingsState) {
     if (timerSetting != null) {
       var timerValue = timerSetting.toInt();
       setState(() {
-        progress = 0;
         this.timerSetting = timerSetting;
         anim = AnimationController(
           vsync: this,
@@ -62,7 +61,7 @@ class _ExercisesPageState extends State<ExercisesPage>
             Duration(seconds: (timerSetting.toInt())),
             (Timer t) async => {
                   if (timerValue != 0 && timerSetting != TimerSetting.noTimer)
-                    {await goForward()}
+                    {await goForward(settingsState)}
                 });
       });
     }
@@ -72,7 +71,6 @@ class _ExercisesPageState extends State<ExercisesPage>
     setState(() {
       _delayTimer.cancel();
       anim.dispose();
-      progress = 0.0;
     });
   }
 
@@ -120,7 +118,7 @@ class _ExercisesPageState extends State<ExercisesPage>
                             color: backwardButtonColor,
                           ),
                           onPressed: isBackwardButtonEnabled
-                              ? () async => await goBackward()
+                              ? () async => await goBackward(settings)
                               : null),
                       IconButton(
                           icon: FaIcon(
@@ -128,7 +126,7 @@ class _ExercisesPageState extends State<ExercisesPage>
                             color: forwardsButtonColor,
                           ),
                           onPressed: isForwardButtonEnabled
-                              ? () async => await goForward()
+                              ? () async => await goForward(settings)
                               : null),
                       IconButton(
                         icon: const FaIcon(
@@ -146,7 +144,8 @@ class _ExercisesPageState extends State<ExercisesPage>
         });
   }
 
-  Future<void> goBackward() async {
+  Future<void> goBackward(AppState settingsState) async {
+    await settingsState.stopAudio();
     cancelTimers();
     if (currentExercise != 0) {
       setState(() {
@@ -164,8 +163,10 @@ class _ExercisesPageState extends State<ExercisesPage>
         isBackwardButtonEnabled = false;
       });
     }
-
-    initTimers(timerSetting);
+    await settingsState.playAudio(exerciseModels
+        .firstWhere((element) => element.sequence == currentExercise)
+        .audio);
+    initTimers(timerSetting, settingsState);
   }
 
   Future<void> goToHomePage(AppState settingsState) async {
@@ -174,7 +175,9 @@ class _ExercisesPageState extends State<ExercisesPage>
     await settingsState.stopAudio();
   }
 
-  Future<void> goForward() async {
+  Future<void> goForward(AppState settingsState) async {
+    await settingsState.stopAudio();
+    cancelTimers();
     if (lastExercise != currentExercise) {
       var isLastExercise = currentExercise + 1 == lastExercise;
       setState(() {
@@ -185,10 +188,15 @@ class _ExercisesPageState extends State<ExercisesPage>
         forwardsButtonColor = isLastExercise ? Colors.grey : Colors.blue;
       });
     }
+    await settingsState.playAudio(exerciseModels
+        .firstWhere((element) => element.sequence == currentExercise)
+        .audio);
+    initTimers(timerSetting, settingsState);
   }
 
-  void updateTimer(TimerSetting? timerSetting) {
-    initTimers(timerSetting);
+  void updateTimer(TimerSetting? timerSetting, AppState settingsState) {
+    cancelTimers();
+    initTimers(timerSetting, settingsState);
   }
 
   void openInformation(ExerciseModel? exerciseModel) {
@@ -211,9 +219,11 @@ class _ExercisesPageState extends State<ExercisesPage>
         .get();
 
     // Get data from docs and convert map to List
-    return querySnapshot.docs
+    exerciseModels = querySnapshot.docs
         .map(
             (doc) => ExerciseModel.fromJson(doc.data() as Map<String, dynamic>))
         .toList();
+
+    return exerciseModels;
   }
 }

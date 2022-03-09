@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:coursework_two/enums/timer_setting.dart';
 import 'package:flutter/cupertino.dart';
 
 class AppState extends ChangeNotifier {
@@ -8,6 +9,7 @@ class AppState extends ChangeNotifier {
   bool audioEnabled = true;
   double volume = 0.5;
   Timer delayTimer = Timer(const Duration(seconds: 0), () {});
+  TimerSetting timerSetting = TimerSetting.noTimer;
 
   Future<void> init() async {
     await audioCache.fixedPlayer!.setVolume(volume);
@@ -46,12 +48,13 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  // void updateTimerSetting(TimerSetting? timerSetting) {
-  //   if (timerSetting != null) {
-  //     this.timerSetting = timerSetting;
-  //     timerValue = timerSetting.toNumber();
-  //   }
 
-  //   notifyListeners();
-  // }
+
+  void updateTimerSetting(TimerSetting? timerSetting) {
+    if (timerSetting != null) {
+      this.timerSetting = timerSetting;
+    }
+
+    notifyListeners();
+  }
 }
