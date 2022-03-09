@@ -1,6 +1,4 @@
 import 'package:coursework_two/dialogs/settings_dialog.dart';
-import 'package:coursework_two/enums/timer_setting.dart';
-import 'package:coursework_two/state/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -21,9 +19,7 @@ AppBar createAppBar(String title, BuildContext context) {
         icon: const FaIcon(FontAwesomeIcons.wrench),
         tooltip: 'Settings',
         onPressed: () {
-          showDialog(
-              context: context,
-              builder: (context) => SettingsDialog());
+          showDialog(context: context, builder: (context) => SettingsDialog());
         },
       ),
     ],

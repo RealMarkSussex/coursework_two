@@ -33,10 +33,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Future<List<CardInfoModel>> getCardInfoModel() async {
     CollectionReference _cardInfoRef =
         FirebaseFirestore.instance.collection('cardInfo');
-    // Get docs from collection reference
     QuerySnapshot querySnapshot = await _cardInfoRef.get();
 
-    // Get data from docs and convert map to List
     return querySnapshot.docs
         .map(
             (doc) => CardInfoModel.fromJson(doc.data() as Map<String, dynamic>))

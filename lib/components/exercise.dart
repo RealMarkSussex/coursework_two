@@ -1,4 +1,3 @@
-import 'package:coursework_two/models/exercise_model.dart';
 import 'package:coursework_two/state/exercise_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +26,7 @@ class Exercise extends StatelessWidget {
                           image: AssetImage(
                               'assets/images/${exerciseModel.image}'),
                         )
-                      : SizedBox(),
+                      : const SizedBox.shrink(),
                 ),
               ),
             ),
