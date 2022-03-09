@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coursework_two/components/exercise.dart';
 import 'package:coursework_two/dialogs/exercise_info_dialog.dart';
@@ -9,6 +8,7 @@ import 'package:coursework_two/state/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 
 import '../components/sun_salutations_app_bar.dart';
 import '../models/exercise_model.dart';
@@ -35,13 +35,12 @@ class _ExercisesPageState extends State<ExercisesPage>
   List<ExerciseModel> exerciseModels = [];
   Timer _delayTimer = Timer(const Duration(seconds: 0), () {});
   late AnimationController anim =
-      AnimationController(vsync: this, duration: Duration(seconds: 1))
+      AnimationController(vsync: this, duration: const Duration(seconds: 1))
         ..forward();
 
   @override
   void initState() {
     _future = getExercises();
-
     super.initState();
   }
 
@@ -163,6 +162,7 @@ class _ExercisesPageState extends State<ExercisesPage>
         isBackwardButtonEnabled = false;
       });
     }
+    BackButtonInterceptor.add(myInterceptor);
     await settingsState.playAudio(exerciseModels
         .firstWhere((element) => element.sequence == currentExercise)
         .audio);
@@ -171,8 +171,8 @@ class _ExercisesPageState extends State<ExercisesPage>
 
   Future<void> goToHomePage(AppState settingsState) async {
     cancelTimers();
-    Navigator.pushNamed(context, '/');
     await settingsState.stopAudio();
+    Navigator.pushNamed(context, '/');
   }
 
   Future<void> goForward(AppState settingsState) async {
@@ -188,6 +188,7 @@ class _ExercisesPageState extends State<ExercisesPage>
         forwardsButtonColor = isLastExercise ? Colors.grey : Colors.blue;
       });
     }
+    BackButtonInterceptor.add(myInterceptor);
     await settingsState.playAudio(exerciseModels
         .firstWhere((element) => element.sequence == currentExercise)
         .audio);
@@ -207,6 +208,18 @@ class _ExercisesPageState extends State<ExercisesPage>
           builder: (context) =>
               ExerciseInfoDialog(exerciseModel: exerciseModel));
     }
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    if (mounted) {
+      if (isBackwardButtonEnabled) {
+        goBackward(Provider.of(context, listen: false));
+      } else if (!isBackwardButtonEnabled) {
+        goToHomePage(Provider.of(context, listen: false));
+      }
+      return true;
+    }
+    return false;
   }
 
   Future<List<ExerciseModel>> getExercises() async {
