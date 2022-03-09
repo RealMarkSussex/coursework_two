@@ -44,10 +44,8 @@ class MyApp extends StatelessWidget {
 Future<List<ExerciseModel>> getExercises() async {
   CollectionReference _exercisesRef =
       FirebaseFirestore.instance.collection('exercises');
-  // Get docs from collection reference
   QuerySnapshot querySnapshot = await _exercisesRef.orderBy('sequence').get();
 
-  // Get data from docs and convert map to List
   return querySnapshot.docs
       .map((doc) => ExerciseModel.fromJson(doc.data() as Map<String, dynamic>))
       .toList();

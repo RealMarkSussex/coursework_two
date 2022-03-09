@@ -5,7 +5,6 @@ class SettingsState extends ChangeNotifier {
   bool _audioEnabled = true;
   double _volume = 0.5;
   TimerSetting _timerSetting = TimerSetting.noTimer;
-
   bool get audioEnabled => _audioEnabled;
   double get volume => _volume;
   TimerSetting get timerSetting => _timerSetting;
