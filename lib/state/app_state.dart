@@ -25,7 +25,7 @@ class AppState extends ChangeNotifier {
     if (audioEnabled && fileName.isNotEmpty) {
       await audioCache.fixedPlayer!.stop();
       Future.delayed(const Duration(milliseconds: 500), () async {
-        await audioCache.play("audio/$fileName");
+        await audioCache.play("audio/$fileName", mode: PlayerMode.LOW_LATENCY);
       });
     }
 

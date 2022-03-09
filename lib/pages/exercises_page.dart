@@ -34,7 +34,9 @@ class _ExercisesPageState extends State<ExercisesPage>
   double progress = 0;
   Future<List<ExerciseModel>> _future = Future.value([]);
   Timer _delayTimer = Timer(const Duration(seconds: 0), () {});
-  Timer _progressTimer = Timer(const Duration(seconds: 0), () {});
+  late AnimationController anim =
+      AnimationController(vsync: this, duration: Duration(seconds: 1))
+        ..forward();
 
   @override
   void initState() {
@@ -49,9 +51,13 @@ class _ExercisesPageState extends State<ExercisesPage>
       setState(() {
         progress = 0;
         this.timerSetting = timerSetting;
-        _progressTimer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
-          progress += 1 / timerValue;
-        });
+        anim = AnimationController(
+          vsync: this,
+          duration: Duration(seconds: timerValue),
+        )..addListener(() {
+            setState(() {});
+          });
+        anim.repeat();
         _delayTimer = Timer.periodic(
             Duration(seconds: (timerSetting.toInt())),
             (Timer t) async => {
@@ -65,7 +71,7 @@ class _ExercisesPageState extends State<ExercisesPage>
   void cancelTimers() {
     setState(() {
       _delayTimer.cancel();
-      _progressTimer.cancel();
+      anim.dispose();
       progress = 0.0;
     });
   }
@@ -94,7 +100,7 @@ class _ExercisesPageState extends State<ExercisesPage>
                     : const SizedBox.shrink(),
                 timerSetting != TimerSetting.noTimer
                     ? LinearProgressIndicator(
-                        value: progress,
+                        value: anim.value,
                         semanticsLabel: 'Linear progress indicator',
                       )
                     : const SizedBox.shrink(),
