@@ -38,20 +38,24 @@ class ExerciseState extends ChangeNotifier {
           exerciseType: "");
 
   void goForward() {
-    _currentExercise++;
+    var nextExercise = currentExercise + 1;
     _isBackwardButtonEnabled = true;
-    if (_currentExercise == lastExercise) {
+    if (nextExercise == lastExercise) {
       _isForwardButtonEnabled = false;
+    } else {
+      _currentExercise++;
     }
     notifyListeners();
   }
 
   void goBackward() {
-    _currentExercise--;
     _isForwardButtonEnabled = true;
     if (_currentExercise == 0) {
       _isBackwardButtonEnabled = false;
+    } else {
+      _currentExercise--;
     }
+
     notifyListeners();
   }
 

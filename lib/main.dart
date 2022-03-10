@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coursework_two/pages/about_page.dart';
 import 'package:coursework_two/pages/home_page.dart';
 import 'package:coursework_two/state/exercise_state.dart';
+import 'package:coursework_two/state/progress_state.dart';
 import 'package:coursework_two/state/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -18,7 +19,8 @@ void main() async {
   var exerciseState = ExerciseState(await getExercises());
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => SettingsState()),
-    ChangeNotifierProvider(create: (context) => exerciseState)
+    ChangeNotifierProvider(create: (context) => exerciseState),
+    ChangeNotifierProvider(create: (context) => ProgressState()),
   ], child: const MyApp()));
 }
 

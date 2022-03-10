@@ -21,7 +21,7 @@ class _ProgressBarState extends State<ProgressBar>
   @override
   void initState() {
     var settingsState = Provider.of<SettingsState>(context, listen: false);
-    var timerValue = settingsState.timerSetting.toInt();
+    var timerValue = settingsState.timerSetting.toInt() - 15;
     controller = AnimationController(
       vsync: this,
       duration: Duration(seconds: timerValue == 0 ? 5 : timerValue),
