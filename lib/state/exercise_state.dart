@@ -63,4 +63,10 @@ class ExerciseState extends ChangeNotifier {
     _exerciseType = value;
     notifyListeners();
   }
+
+  void restart() {
+    _currentExercise = 0;
+    _isForwardButtonEnabled = true;
+    _isBackwardButtonEnabled = false;
+  }
 }

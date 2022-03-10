@@ -52,6 +52,6 @@ class TopBar extends StatelessWidget {
 
   void onStopPressed(ProgressState progressState) {
     progressState.isPlaying = false;
-    progressState.delayTimer.cancel();
+    progressState.cancelTimer();
   }
 }

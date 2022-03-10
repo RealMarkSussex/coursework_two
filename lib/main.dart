@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coursework_two/pages/about_page.dart';
 import 'package:coursework_two/pages/home_page.dart';
+import 'package:coursework_two/state/audio_state.dart';
 import 'package:coursework_two/state/exercise_state.dart';
 import 'package:coursework_two/state/progress_state.dart';
 import 'package:coursework_two/state/settings_state.dart';
@@ -21,6 +22,7 @@ void main() async {
     ChangeNotifierProvider(create: (context) => SettingsState()),
     ChangeNotifierProvider(create: (context) => exerciseState),
     ChangeNotifierProvider(create: (context) => ProgressState()),
+    ChangeNotifierProvider(create: (context) => AudioState()),
   ], child: const MyApp()));
 }
 
