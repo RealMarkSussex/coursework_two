@@ -12,7 +12,6 @@ AppBar createAppBar(String title, BuildContext context) {
         icon: const FaIcon(FontAwesomeIcons.infoCircle),
         tooltip: 'About',
         onPressed: () {
-
           Navigator.pushNamed(context, '/about');
         },
       ),
@@ -29,6 +28,12 @@ AppBar createAppBar(String title, BuildContext context) {
           tooltip: 'Leave a comment',
           onPressed: () {
             Navigator.pushNamed(context, '/comment');
+          }),
+      IconButton(
+          icon: const FaIcon(FontAwesomeIcons.creditCard),
+          tooltip: 'Credits',
+          onPressed: () {
+            Navigator.pushNamed(context, '/credits');
           })
     ],
   );
