@@ -14,11 +14,11 @@ class ToolBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<ExerciseState>(builder: (context, exerciseState, child) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Consumer<ProgressState>(builder: (context, progressState, child) {
-            return Consumer<AudioState>(builder: (context, audioState, child) {
+      return Consumer<ProgressState>(builder: (context, progressState, child) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Consumer<AudioState>(builder: (context, audioState, child) {
               return IconButton(
                   icon: const FaIcon(
                     FontAwesomeIcons.home,
@@ -26,38 +26,38 @@ class ToolBar extends StatelessWidget {
                   ),
                   onPressed: () async => await goToHomePage(
                       context, audioState, exerciseState, progressState));
-            });
-          }),
-          IconButton(
-              icon: FaIcon(
-                FontAwesomeIcons.angleDoubleLeft,
-                color: exerciseState.isBackwardButtonEnabled
-                    ? Colors.blue
-                    : Colors.grey,
+            }),
+            IconButton(
+                icon: FaIcon(
+                  FontAwesomeIcons.angleDoubleLeft,
+                  color: exerciseState.isBackwardButtonEnabled
+                      ? Colors.blue
+                      : Colors.grey,
+                ),
+                onPressed: exerciseState.isBackwardButtonEnabled
+                    ? () => goBackward(exerciseState, progressState)
+                    : null),
+            IconButton(
+                icon: FaIcon(
+                  FontAwesomeIcons.angleDoubleRight,
+                  color: exerciseState.isForwardButtonEnabled
+                      ? Colors.blue
+                      : Colors.grey,
+                ),
+                onPressed: exerciseState.isForwardButtonEnabled
+                    ? () => goForward(exerciseState, progressState)
+                    : null),
+            IconButton(
+              icon: const FaIcon(
+                FontAwesomeIcons.question,
+                color: Colors.amber,
               ),
-              onPressed: exerciseState.isBackwardButtonEnabled
-                  ? () => goBackward(exerciseState)
-                  : null),
-          IconButton(
-              icon: FaIcon(
-                FontAwesomeIcons.angleDoubleRight,
-                color: exerciseState.isForwardButtonEnabled
-                    ? Colors.blue
-                    : Colors.grey,
-              ),
-              onPressed: exerciseState.isForwardButtonEnabled
-                  ? () => goForward(exerciseState)
-                  : null),
-          IconButton(
-            icon: const FaIcon(
-              FontAwesomeIcons.question,
-              color: Colors.amber,
-            ),
-            onPressed: () =>
-                openInformation(exerciseState.currentExerciseModel, context),
-          )
-        ],
-      );
+              onPressed: () =>
+                  openInformation(exerciseState.currentExerciseModel, context),
+            )
+          ],
+        );
+      });
     });
   }
 
@@ -76,11 +76,15 @@ class ToolBar extends StatelessWidget {
     Navigator.pushNamed(context, "/");
   }
 
-  void goForward(ExerciseState exerciseState) {
+  void goForward(ExerciseState exerciseState, ProgressState progressState) {
+    progressState.isPlaying = false;
+    progressState.cancelTimer();
     exerciseState.goForward();
   }
 
-  void goBackward(ExerciseState exerciseState) {
+  void goBackward(ExerciseState exerciseState, ProgressState progressState) {
+    progressState.isPlaying = false;
+    progressState.cancelTimer();
     exerciseState.goBackward();
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:coursework_two/components/exercise.dart';
 import 'package:coursework_two/components/progress_bar.dart';
 import 'package:coursework_two/components/tool_bar.dart';
@@ -28,21 +26,23 @@ class _ExercisesPageState extends State<ExercisesPage>
         appBar: createAppBar(exerciseState.exerciseType, context),
         body: Consumer<SettingsState>(builder: (context, settingsState, child) {
           return Consumer<ProgressState>(
-            builder: (context, progressState, child) {
-              return Column(
-                children: [
-                  settingsState.timerSetting != TimerSetting.noTimer
-                      ? const TopBar()
-                      : const SizedBox.shrink(),
-                  const Exercise(),
-                  settingsState.timerSetting != TimerSetting.noTimer && progressState.isPlaying
-                      ? const ProgressBar()
-                      : const SizedBox.shrink(),
-                  const ToolBar(),
-                ],
-              );
-            }
-          );
+              builder: (context, progressState, child) {
+            return Column(
+              children: [
+                settingsState.timerSetting != TimerSetting.noTimer
+                    ? const TopBar()
+                    : const SizedBox.shrink(),
+                const Exercise(),
+                settingsState.timerSetting != TimerSetting.noTimer &&
+                        progressState.isPlaying &&
+                        exerciseState.currentExercise !=
+                            exerciseState.lastExercise
+                    ? const ProgressBar()
+                    : const SizedBox.shrink(),
+                const ToolBar(),
+              ],
+            );
+          });
         }),
       );
     });

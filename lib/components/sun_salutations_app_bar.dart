@@ -12,6 +12,7 @@ AppBar createAppBar(String title, BuildContext context) {
         icon: const FaIcon(FontAwesomeIcons.infoCircle),
         tooltip: 'About',
         onPressed: () {
+
           Navigator.pushNamed(context, '/about');
         },
       ),
@@ -19,9 +20,16 @@ AppBar createAppBar(String title, BuildContext context) {
         icon: const FaIcon(FontAwesomeIcons.wrench),
         tooltip: 'Settings',
         onPressed: () {
-          showDialog(context: context, builder: (context) => SettingsDialog());
+          showDialog(
+              context: context, builder: (context) => const SettingsDialog());
         },
       ),
+      IconButton(
+          icon: const FaIcon(FontAwesomeIcons.comment),
+          tooltip: 'Leave a comment',
+          onPressed: () {
+            Navigator.pushNamed(context, '/comment');
+          })
     ],
   );
 }
