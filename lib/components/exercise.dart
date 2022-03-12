@@ -1,6 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:coursework_two/state/audio_state.dart';
 import 'package:coursework_two/state/exercise_state.dart';
+import 'package:coursework_two/state/page_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -83,7 +84,9 @@ class _ExerciseState extends State<Exercise> {
     var settingsState = Provider.of<SettingsState>(context, listen: false);
     var exerciseState = Provider.of<ExerciseState>(context, listen: false);
     var audioState = Provider.of<AudioState>(context, listen: false);
-    if (settingsState.audioEnabled) {
+    var pageState = Provider.of<PageState>(context, listen: false);
+
+    if (settingsState.audioEnabled && pageState.isOnExercisePage) {
       if (exerciseState.currentExerciseModel.audio == "-") {
         await audioState.audioPlayer.play('audio/noSound.mp3');
       } else {

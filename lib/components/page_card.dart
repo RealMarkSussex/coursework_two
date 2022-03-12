@@ -4,6 +4,8 @@ import 'package:coursework_two/state/exercise_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../state/page_state.dart';
+
 class PageCard extends StatelessWidget {
   final CardInfoModel cardInfoModel;
   const PageCard({Key? key, required this.cardInfoModel}) : super(key: key);
@@ -33,30 +35,35 @@ class PageCard extends StatelessWidget {
             ),
           ),
           Consumer<ExerciseState>(builder: (context, exerciseState, child) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                      style:
-                          ElevatedButton.styleFrom(primary: Colors.lightGreen),
-                      onPressed: () => {startPage(context, exerciseState)},
-                      child: const Text(
-                        "Start",
-                        style: TextStyle(fontSize: buttonFontSize),
-                      )),
-                ),
-              ],
-            );
+            return Consumer<PageState>(builder: (context, pageState, child) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.lightGreen),
+                        onPressed: () =>
+                            {startPage(context, exerciseState, pageState)},
+                        child: const Text(
+                          "Start",
+                          style: TextStyle(fontSize: buttonFontSize),
+                        )),
+                  ),
+                ],
+              );
+            });
           })
         ],
       )),
     );
   }
 
-  void startPage(BuildContext context, ExerciseState exerciseState) {
+  void startPage(
+      BuildContext context, ExerciseState exerciseState, PageState pageState) {
     exerciseState.exerciseType = cardInfoModel.name;
+    pageState.isOnExercisePage = true;
     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
       return const ExercisesPage();
     }));

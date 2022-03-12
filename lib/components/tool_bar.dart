@@ -1,5 +1,6 @@
 import 'package:coursework_two/state/audio_state.dart';
 import 'package:coursework_two/state/exercise_state.dart';
+import 'package:coursework_two/state/page_state.dart';
 import 'package:coursework_two/state/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -19,7 +20,7 @@ class ToolBar extends StatelessWidget {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Consumer<SettingsState>(builder: (context, settingsState, child) {
+            Consumer<PageState>(builder: (context, pageState, child) {
               return Consumer<AudioState>(
                   builder: (context, audioState, child) {
                 return IconButton(
@@ -32,7 +33,7 @@ class ToolBar extends StatelessWidget {
                         audioState,
                         exerciseState,
                         progressState,
-                        settingsState));
+                        pageState));
               });
             }),
             IconButton(
@@ -80,9 +81,9 @@ class ToolBar extends StatelessWidget {
       AudioState audioState,
       ExerciseState exerciseState,
       ProgressState progressState,
-      SettingsState settingsState) async {
+      PageState pageState) async {
     await audioState.stopAudio();
-    settingsState.audioEnabled = false;
+    pageState.isOnExercisePage = false;
     exerciseState.restart();
     progressState.stop();
     Navigator.pushNamed(context, "/");
