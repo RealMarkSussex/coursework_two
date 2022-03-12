@@ -1,3 +1,4 @@
+import 'package:coursework_two/enums/level.dart';
 import 'package:coursework_two/enums/set_setting.dart';
 import 'package:coursework_two/enums/timer_setting.dart';
 import 'package:flutter/material.dart';
@@ -7,11 +8,13 @@ class SettingsState extends ChangeNotifier {
   double _volume = 0.5;
   TimerSetting _timerSetting = TimerSetting.noTimer;
   SetSetting _setSetting = SetSetting.noSets;
+  Level _level = Level.newToYoga;
 
   bool get audioEnabled => _audioEnabled;
   double get volume => _volume;
   TimerSetting get timerSetting => _timerSetting;
   SetSetting get setSetting => _setSetting;
+  Level get level => _level;
 
   set volume(double value) {
     _volume = value;
@@ -30,6 +33,11 @@ class SettingsState extends ChangeNotifier {
 
   set setSetting(SetSetting value) {
     _setSetting = value;
+    notifyListeners();
+  }
+
+  set level(Level value) {
+    _level = value;
     notifyListeners();
   }
 }

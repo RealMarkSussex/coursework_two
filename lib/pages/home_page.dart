@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coursework_two/components/page_card.dart';
 import 'package:coursework_two/components/sun_salutations_app_bar.dart';
+import 'package:coursework_two/dialogs/level_dialog.dart';
 import 'package:coursework_two/models/card_info_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -12,6 +14,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+  @override
+  void initState() {
+    super.initState();
+    SchedulerBinding.instance?.addPostFrameCallback((_) {
+      showDialog(context: context, builder: (context) => const LevelDialog());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<CardInfoModel>>(

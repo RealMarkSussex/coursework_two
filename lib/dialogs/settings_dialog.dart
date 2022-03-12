@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
+import '../enums/level.dart';
+
 class SettingsDialog extends StatelessWidget {
   static const paragraphSpacing = 20.0;
   static const textSpacing = 20.0;
@@ -99,6 +101,26 @@ class SettingsDialog extends StatelessWidget {
                               .toList(),
                           onChanged: (value) =>
                               settingsState.setSetting = value!),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    const Text("Change level"),
+                    const SizedBox(
+                      width: SettingsDialog.textSpacing,
+                    ),
+                    Expanded(
+                      child: DropdownButton<Level>(
+                          value: settingsState.level,
+                          items: settingsState.level
+                              .toList()
+                              .map((levelModel) => DropdownMenuItem<Level>(
+                                    child: Text(levelModel.description),
+                                    value: levelModel.level,
+                                  ))
+                              .toList(),
+                          onChanged: (value) => settingsState.level = value!),
                     ),
                   ],
                 )
