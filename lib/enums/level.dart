@@ -12,6 +12,11 @@ extension Parser on Level {
           description: "Advanced Practitioner"),
     ];
   }
+
+  LevelModel toModel() {
+    var list = toList();
+    return list.firstWhere((element) => element.level == this);
+  }
 }
 
 class LevelModel {
