@@ -1,4 +1,5 @@
 import 'package:coursework_two/dialogs/timer_info_dialog.dart';
+import 'package:coursework_two/enums/set_setting.dart';
 import 'package:coursework_two/enums/timer_setting.dart';
 import 'package:coursework_two/state/audio_state.dart';
 import 'package:coursework_two/state/exercise_state.dart';
@@ -60,28 +61,14 @@ class SettingsDialog extends StatelessWidget {
                   Expanded(
                     child: DropdownButton<TimerSetting>(
                         value: settingsState.timerSetting,
-                        items: const [
-                          DropdownMenuItem<TimerSetting>(
-                            child: Text("No timer"),
-                            value: TimerSetting.noTimer,
-                          ),
-                          DropdownMenuItem<TimerSetting>(
-                            child: Text("20 seconds"),
-                            value: TimerSetting.twentySeconds,
-                          ),
-                          DropdownMenuItem<TimerSetting>(
-                            child: Text("40 seconds"),
-                            value: TimerSetting.fourtySeconds,
-                          ),
-                          DropdownMenuItem<TimerSetting>(
-                            child: Text("1 minute"),
-                            value: TimerSetting.oneMinute,
-                          ),
-                          DropdownMenuItem<TimerSetting>(
-                            child: Text("2 minutes"),
-                            value: TimerSetting.twoMinutes,
-                          )
-                        ],
+                        items: settingsState.timerSetting
+                            .toList()
+                            .map((timerSettingModel) =>
+                                DropdownMenuItem<TimerSetting>(
+                                  child: Text(timerSettingModel.description),
+                                  value: timerSettingModel.timerSetting,
+                                ))
+                            .toList(),
                         onChanged: (value) =>
                             settingsState.timerSetting = value!),
                   ),
@@ -92,7 +79,29 @@ class SettingsDialog extends StatelessWidget {
                       color: Colors.amber,
                     ),
                   )
-                ])
+                ]),
+                Row(
+                  children: [
+                    const Text("Change number of sets"),
+                    const SizedBox(
+                      width: SettingsDialog.textSpacing,
+                    ),
+                    Expanded(
+                      child: DropdownButton<SetSetting>(
+                          value: settingsState.setSetting,
+                          items: settingsState.setSetting
+                              .toList()
+                              .map((setSettingModel) =>
+                                  DropdownMenuItem<SetSetting>(
+                                    child: Text(setSettingModel.description),
+                                    value: setSettingModel.setSetting,
+                                  ))
+                              .toList(),
+                          onChanged: (value) =>
+                              settingsState.setSetting = value!),
+                    ),
+                  ],
+                )
               ],
             ),
           );

@@ -35,8 +35,9 @@ class _ExercisesPageState extends State<ExercisesPage>
                 const Exercise(),
                 settingsState.timerSetting != TimerSetting.noTimer &&
                         progressState.isPlaying &&
-                        exerciseState.currentExercise !=
-                            exerciseState.lastExercise
+                        (exerciseState.currentExercise !=
+                                exerciseState.lastExercise ||
+                            progressState.setsLeft > 0)
                     ? const ProgressBar()
                     : const SizedBox.shrink(),
                 const ToolBar(),
