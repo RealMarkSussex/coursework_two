@@ -25,6 +25,16 @@ class _ExerciseState extends State<Exercise> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                        child: Text(
+                          exerciseModel.name,
+                          style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
                     Expanded(
                       child: Center(
                         child: Padding(
@@ -74,8 +84,12 @@ class _ExerciseState extends State<Exercise> {
     var exerciseState = Provider.of<ExerciseState>(context, listen: false);
     var audioState = Provider.of<AudioState>(context, listen: false);
     if (settingsState.audioEnabled) {
-      audioState.audioPlayer
-          .play('audio/${exerciseState.currentExerciseModel.audio}');
+      if (exerciseState.currentExerciseModel.audio == "-") {
+        await audioState.audioPlayer.play('audio/noSound.mp3');
+      } else {
+        await audioState.audioPlayer
+            .play('audio/${exerciseState.currentExerciseModel.audio}');
+      }
     }
   }
 }

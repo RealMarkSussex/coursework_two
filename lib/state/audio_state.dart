@@ -9,7 +9,6 @@ class AudioState extends ChangeNotifier {
   Future<void> playAudio(String fileName) async {
     await _audioPlayer.play(fileName);
     notifyListeners();
-
   }
 
   Future<void> stopAudio() async {

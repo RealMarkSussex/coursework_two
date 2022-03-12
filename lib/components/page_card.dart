@@ -40,17 +40,6 @@ class PageCard extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                       style:
-                          ElevatedButton.styleFrom(primary: Colors.lightBlue),
-                      onPressed: infoPage,
-                      child: const Text(
-                        "Info",
-                        style: TextStyle(fontSize: buttonFontSize),
-                      )),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                      style:
                           ElevatedButton.styleFrom(primary: Colors.lightGreen),
                       onPressed: () => {startPage(context, exerciseState)},
                       child: const Text(
@@ -65,8 +54,6 @@ class PageCard extends StatelessWidget {
       )),
     );
   }
-
-  void infoPage() {}
 
   void startPage(BuildContext context, ExerciseState exerciseState) {
     exerciseState.exerciseType = cardInfoModel.name;

@@ -20,7 +20,11 @@ class ExerciseState extends ChangeNotifier {
   int get currentExercise => _currentExercise;
   bool get isForwardButtonEnabled => _isForwardButtonEnabled;
   bool get isBackwardButtonEnabled => _isBackwardButtonEnabled;
-  int get lastExercise => _exercises.length - 1;
+  int get lastExercise =>
+      _exercises
+          .where((element) => element.exerciseType == _exerciseType)
+          .length -
+      1;
   String get exerciseType => _exerciseType;
   ExerciseModel get currentExerciseModel => _exerciseType.isNotEmpty
       ? _exercises.firstWhere((element) =>

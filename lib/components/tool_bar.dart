@@ -19,14 +19,21 @@ class ToolBar extends StatelessWidget {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Consumer<AudioState>(builder: (context, audioState, child) {
-              return IconButton(
-                  icon: const FaIcon(
-                    FontAwesomeIcons.home,
-                    color: Colors.lightGreen,
-                  ),
-                  onPressed: () async => await goToHomePage(
-                      context, audioState, exerciseState, progressState));
+            Consumer<SettingsState>(builder: (context, settingsState, child) {
+              return Consumer<AudioState>(
+                  builder: (context, audioState, child) {
+                return IconButton(
+                    icon: const FaIcon(
+                      FontAwesomeIcons.home,
+                      color: Colors.lightGreen,
+                    ),
+                    onPressed: () async => await goToHomePage(
+                        context,
+                        audioState,
+                        exerciseState,
+                        progressState,
+                        settingsState));
+              });
             }),
             IconButton(
                 icon: FaIcon(
@@ -68,9 +75,14 @@ class ToolBar extends StatelessWidget {
         builder: (context) => ExerciseInfoDialog(exerciseModel: exerciseModel));
   }
 
-  Future<void> goToHomePage(BuildContext context, AudioState audioState,
-      ExerciseState exerciseState, ProgressState progressState) async {
+  Future<void> goToHomePage(
+      BuildContext context,
+      AudioState audioState,
+      ExerciseState exerciseState,
+      ProgressState progressState,
+      SettingsState settingsState) async {
     await audioState.stopAudio();
+    settingsState.audioEnabled = false;
     exerciseState.restart();
     progressState.stop();
     Navigator.pushNamed(context, "/");
