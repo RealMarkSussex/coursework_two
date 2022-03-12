@@ -11,15 +11,13 @@ class ExerciseState extends ChangeNotifier {
 
   List<ExerciseModel> _exercises = [];
   int _currentExercise = 0;
-  bool _isForwardButtonEnabled = true;
-  bool _isBackwardButtonEnabled = false;
   String _exerciseType = "";
   UnmodifiableListView<ExerciseModel> get exercises =>
       UnmodifiableListView(_exercises);
 
   int get currentExercise => _currentExercise;
-  bool get isForwardButtonEnabled => _isForwardButtonEnabled;
-  bool get isBackwardButtonEnabled => _isBackwardButtonEnabled;
+  bool get isLastExercise => _currentExercise == lastExercise;
+  bool get isFirstExercise => _currentExercise == 0;
   int get lastExercise =>
       _exercises
           .where((element) => element.exerciseType == _exerciseType)
@@ -42,22 +40,14 @@ class ExerciseState extends ChangeNotifier {
           exerciseType: "");
 
   void goForward() {
-    var nextExercise = currentExercise + 1;
-    _isBackwardButtonEnabled = true;
-    if (nextExercise == lastExercise) {
-      _currentExercise++;
-      _isForwardButtonEnabled = false;
-    } else {
+    if (!isLastExercise) {
       _currentExercise++;
     }
     notifyListeners();
   }
 
   void goBackward() {
-    _isForwardButtonEnabled = true;
-    if (_currentExercise == 0) {
-      _isBackwardButtonEnabled = false;
-    } else {
+    if (!isFirstExercise) {
       _currentExercise--;
     }
 
@@ -71,12 +61,6 @@ class ExerciseState extends ChangeNotifier {
 
   void restart() {
     _currentExercise = 0;
-    _isForwardButtonEnabled = true;
-    _isBackwardButtonEnabled = false;
     notifyListeners();
-  }
-
-  bool isLastExercise() {
-    return _currentExercise == lastExercise;
   }
 }

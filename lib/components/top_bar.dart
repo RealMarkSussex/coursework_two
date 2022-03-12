@@ -57,7 +57,7 @@ class TopBar extends StatelessWidget {
   }
 
   void timerFunction(ExerciseState exerciseState, ProgressState progressState) {
-    if (!exerciseState.isLastExercise()) {
+    if (!exerciseState.isLastExercise) {
       exerciseState.goForward();
     } else if (progressState.setsLeft > 0) {
       exerciseState.restart();

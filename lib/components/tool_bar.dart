@@ -39,21 +39,21 @@ class ToolBar extends StatelessWidget {
             IconButton(
                 icon: FaIcon(
                   FontAwesomeIcons.angleDoubleLeft,
-                  color: exerciseState.isBackwardButtonEnabled
+                  color: !exerciseState.isFirstExercise
                       ? Colors.blue
                       : Colors.grey,
                 ),
-                onPressed: exerciseState.isBackwardButtonEnabled
+                onPressed: !exerciseState.isFirstExercise
                     ? () => goBackward(exerciseState, progressState)
                     : null),
             IconButton(
                 icon: FaIcon(
                   FontAwesomeIcons.angleDoubleRight,
-                  color: exerciseState.isForwardButtonEnabled
+                  color: !exerciseState.isLastExercise
                       ? Colors.blue
                       : Colors.grey,
                 ),
-                onPressed: exerciseState.isForwardButtonEnabled
+                onPressed: !exerciseState.isLastExercise
                     ? () => goForward(exerciseState, progressState)
                     : null),
             IconButton(
