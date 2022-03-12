@@ -20,41 +20,49 @@ class _CommentPageState extends State<CommentPage> {
       appBar: createAppBar('Comments', context),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
-        child: Form(
-          key: _formKey,
-          child: Column(children: [
-            TextFormField(
-              controller: emailController,
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(), labelText: 'Enter your email'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter some text';
-                }
+        child: Expanded(
+          child: Form(
+            key: _formKey,
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+              TextFormField(
+                controller: emailController,
+                decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Enter your email'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter some text';
+                  }
 
-                return null;
-              },
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-            TextFormField(
-              controller: commentController,
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(), labelText: 'Enter a comment'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter some text';
-                }
+                  return null;
+                },
+              ),
+              const SizedBox(
+                height: 40,
+              ),
+              TextFormField(
+                keyboardType: TextInputType.multiline,
+                maxLines: 10,
+                controller: commentController,
+                decoration: const InputDecoration(
+                    border: OutlineInputBorder(), labelText: 'Enter a comment'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter some text';
+                  }
 
-                return null;
-              },
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-            ElevatedButton(onPressed: submitForm, child: const Text("Submit"))
-          ]),
+                  return null;
+                },
+              ),
+              const SizedBox(
+                height: 40,
+              ),
+              Flexible(
+                  child: ElevatedButton(
+                      onPressed: submitForm, child: const Text("Submit")))
+            ]),
+          ),
         ),
       ),
     );

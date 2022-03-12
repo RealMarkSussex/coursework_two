@@ -16,27 +16,30 @@ class CreditsPage extends StatelessWidget {
           var credits = snapshot.data!;
           return Scaffold(
             appBar: createAppBar('Credits', context),
-            body: ListView.separated(
-              padding: const EdgeInsets.all(8),
-              itemCount: credits.length,
-              itemBuilder: (BuildContext context, int index) {
-                var credit = credits[index];
-                return SizedBox(
-                  height: 50,
-                  child: Center(
-                      child: Linkify(
-                          onOpen: (link) async {
-                            if (await canLaunch(link.url)) {
-                              await launch(link.url);
-                            } else {
-                              throw 'Could not launch $link';
-                            }
-                          },
-                          text: '${credit.description} by ${credit.url}')),
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) =>
-                  const Divider(),
+            body: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ListView.separated(
+                padding: const EdgeInsets.all(8),
+                itemCount: credits.length,
+                itemBuilder: (BuildContext context, int index) {
+                  var credit = credits[index];
+                  return SizedBox(
+                    height: 50,
+                    child: Center(
+                        child: Linkify(
+                            onOpen: (link) async {
+                              if (await canLaunch(link.url)) {
+                                await launch(link.url);
+                              } else {
+                                throw 'Could not launch $link';
+                              }
+                            },
+                            text: '${credit.description} by ${credit.url}')),
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) =>
+                    const Divider(),
+              ),
             ),
           );
         });

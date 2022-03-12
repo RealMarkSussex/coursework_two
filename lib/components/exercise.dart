@@ -1,4 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:coursework_two/components/interactive_image.dart';
 import 'package:coursework_two/state/audio_state.dart';
 import 'package:coursework_two/state/exercise_state.dart';
 import 'package:coursework_two/state/page_state.dart';
@@ -37,22 +38,18 @@ class _ExerciseState extends State<Exercise> {
                       ),
                     ),
                     Expanded(
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: InteractiveViewer(
-                            panEnabled: false,
-                            boundaryMargin: const EdgeInsets.all(100),
-                            minScale: 0.5,
-                            maxScale: 2,
-                            child: exerciseModel.image.isNotEmpty
-                                ? Image(
-                                    image: AssetImage(
-                                        'assets/images/${exerciseModel.image}'),
-                                  )
-                                : const SizedBox.shrink(),
-                          ),
-                        ),
+                      child: InteractiveViewer(
+                        panEnabled: false,
+                        boundaryMargin: const EdgeInsets.all(20.0),
+                        minScale: 0.1,
+                        maxScale: 1.6,
+                        child: exerciseModel.image.isNotEmpty
+                            ? InteractiveImage(
+                                image: Image(
+                                image: AssetImage(
+                                    'assets/images/${exerciseModel.image}'),
+                              ))
+                            : const SizedBox.shrink(),
                       ),
                     ),
                     Expanded(
