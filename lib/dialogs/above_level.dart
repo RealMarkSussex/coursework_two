@@ -9,48 +9,67 @@ import '../state/page_state.dart';
 class AboveLevel extends StatelessWidget {
   final String exerciseType;
   const AboveLevel({Key? key, required this.exerciseType}) : super(key: key);
+  static const textSpacing = 20.0;
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text('Above Level'),
-      content: Expanded(
-        child: Column(
-          children: [
-            Expanded(
-              child: Row(
-                children: const [
-                  FaIcon(
-                    FontAwesomeIcons.exclamationTriangle,
-                    color: Colors.amber,
-                  ),
-                  Flexible(
-                    child: Text(
-                        'WARNING: You could be starting an exercise above your skill level.'),
-                  )
-                ],
-              ),
+    return SimpleDialog(
+        title: Row(
+          children: const [
+            FaIcon(
+              FontAwesomeIcons.exclamationTriangle,
+              color: Colors.amber,
             ),
-            const Text("Are you sure you want to continue?")
+            SizedBox(
+              width: textSpacing,
+            ),
+            Text('Above Level'),
           ],
         ),
-      ),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () => Navigator.pushNamed(context, '/'),
-          child: const Text('No'),
-        ),
-        Consumer<PageState>(builder: (context, pageState, child) {
-          return Consumer<ExerciseState>(
-              builder: (context, exerciseState, child) {
-            return TextButton(
-              onPressed: () => openExercises(context, exerciseState, pageState),
-              child: const Text('Yes'),
-            );
-          });
-        }),
-      ],
-    );
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Flexible(
+                      child: Text(
+                          'WARNING: You could be starting an exercise above your skill level.'),
+                    )
+                  ],
+                ),
+                const Divider(),
+                Row(
+                  children: const [
+                    Text("Are you sure you want to continue?"),
+                  ],
+                ),
+                const Divider(),
+                Row(
+                  children: [
+                    TextButton(
+                      onPressed: () => Navigator.pushNamed(context, '/'),
+                      child: const Text('No'),
+                    ),
+                    Consumer<PageState>(builder: (context, pageState, child) {
+                      return Consumer<ExerciseState>(
+                          builder: (context, exerciseState, child) {
+                        return TextButton(
+                          onPressed: () =>
+                              openExercises(context, exerciseState, pageState),
+                          child: const Text('Yes'),
+                        );
+                      });
+                    }),
+                  ],
+                )
+              ],
+            ),
+          ),
+        ]);
   }
 
   void openExercises(
