@@ -1,5 +1,6 @@
 import 'package:coursework_two/state/audio_state.dart';
 import 'package:coursework_two/state/exercise_state.dart';
+import 'package:coursework_two/state/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -71,20 +72,17 @@ class ToolBar extends StatelessWidget {
       ExerciseState exerciseState, ProgressState progressState) async {
     await audioState.stopAudio();
     exerciseState.restart();
-    progressState.isPlaying = false;
-    progressState.cancelTimer();
+    progressState.stop();
     Navigator.pushNamed(context, "/");
   }
 
   void goForward(ExerciseState exerciseState, ProgressState progressState) {
-    progressState.isPlaying = false;
-    progressState.cancelTimer();
+    progressState.stop();
     exerciseState.goForward();
   }
 
   void goBackward(ExerciseState exerciseState, ProgressState progressState) {
-    progressState.isPlaying = false;
-    progressState.cancelTimer();
+    progressState.stop();
     exerciseState.goBackward();
   }
 }

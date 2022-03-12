@@ -41,6 +41,7 @@ class ExerciseState extends ChangeNotifier {
     var nextExercise = currentExercise + 1;
     _isBackwardButtonEnabled = true;
     if (nextExercise == lastExercise) {
+      _currentExercise++;
       _isForwardButtonEnabled = false;
     } else {
       _currentExercise++;
@@ -68,5 +69,10 @@ class ExerciseState extends ChangeNotifier {
     _currentExercise = 0;
     _isForwardButtonEnabled = true;
     _isBackwardButtonEnabled = false;
+    notifyListeners();
+  }
+
+  bool isLastExercise() {
+    return _currentExercise == lastExercise;
   }
 }
