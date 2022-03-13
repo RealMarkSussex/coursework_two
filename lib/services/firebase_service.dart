@@ -77,10 +77,26 @@ class FirebaseService {
     CollectionReference _setsDoneRef =
         FirebaseFirestore.instance.collection('setsDone');
     FirebaseAuth auth = FirebaseAuth.instance;
+    DateTime now = DateTime.now();
+    DateTime date = DateTime(now.year, now.month, now.day);
+    String? uid = auth.currentUser?.uid;
+    QuerySnapshot querySnapshot = await _setsDoneRef.get();
 
-    await _setsDoneRef
-        .doc(const Uuid().v1().toString())
-        .set({'uid': auth.currentUser?.uid, 'date': DateTime.now()});
+    var doc = querySnapshot.docs.where((element) {
+      var data = element.data()! as Map<String, dynamic>;
+      return data["date"].toDate() == date && data["uid"] as String == uid;
+    });
+
+    if (doc.isNotEmpty) {
+      var numberOfSets = (doc.first.data()! as Map<String, dynamic>)["numberOfSets"] as int;
+      await _setsDoneRef
+          .doc(doc.first.id)
+          .set({'uid': uid, 'date': date, 'numberOfSets': numberOfSets + 1});
+    } else {
+      await _setsDoneRef
+          .doc(const Uuid().v1().toString())
+          .set({'uid': uid, 'date': date, 'numberOfSets': 1});
+    }
   }
 
   Future<List<SetModel>> getSetsForUser() async {
