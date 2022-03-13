@@ -10,7 +10,7 @@ extension Parser on TimerSetting {
   int toInt() {
     var timerMappings = <TimerSetting, int>{
       TimerSetting.noTimer: 0,
-      TimerSetting.twentySeconds: 1,
+      TimerSetting.twentySeconds: 20,
       TimerSetting.fourtySeconds: 40,
       TimerSetting.oneMinute: 60,
       TimerSetting.twoMinutes: 120

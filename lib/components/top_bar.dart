@@ -66,7 +66,6 @@ class TopBar extends StatelessWidget {
       progressState.setsLeft--;
       await FirebaseService().addSetForUser();
     } else {
-      await FirebaseService().addSetForUser();
       progressState.stop();
     }
   }
