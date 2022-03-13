@@ -18,9 +18,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    SchedulerBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
       showDialog(
-          context: context, builder: (context) => const DisclaimerDialog());
+              context: context, builder: (context) => const DisclaimerDialog())
+          .then((value) => showDialog(
+              context: context, builder: (context) => const LevelDialog()));
     });
   }
 

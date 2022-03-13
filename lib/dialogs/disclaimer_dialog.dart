@@ -37,11 +37,10 @@ class DisclaimerDialog extends StatelessWidget {
                 ),
                 const Divider(),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextButton(
-                      onPressed: () => showDialog(
-                          context: context,
-                          builder: (context) => const LevelDialog()),
+                      onPressed: () => Navigator.pop(context),
                       child: const Text('Ok'),
                     )
                   ],

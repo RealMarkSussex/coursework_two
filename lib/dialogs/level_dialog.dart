@@ -27,13 +27,11 @@ class LevelDialog extends StatelessWidget {
     List<Widget> widgets = [];
     widgets.add(const Text('Choose your skill level'));
     widgets.add(const SizedBox(height: paragraphSpacing));
-    widgets.add(const Text(
-        'This is for automatically scrolling through the exercises without lifting a finger.'));
     widgets.addAll(settingsState.level.toList().map(
           (levelModel) => TextButton(
             onPressed: () => {
               settingsState.level = levelModel.level,
-              Navigator.pop(context, levelModel.description)
+              Navigator.pop(context)
             },
             child: Text(levelModel.description),
           ),
