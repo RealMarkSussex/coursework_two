@@ -15,12 +15,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'models/exercise_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FirebaseAuth.instance.signInAnonymously();
 
   var exerciseState = ExerciseState(await getExercises());
   runApp(MultiProvider(providers: [
