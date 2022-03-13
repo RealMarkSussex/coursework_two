@@ -1,9 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coursework_two/pages/about_page.dart';
 import 'package:coursework_two/pages/comment_page.dart';
 import 'package:coursework_two/pages/credits_page.dart';
 import 'package:coursework_two/pages/edit_exercise_page.dart';
 import 'package:coursework_two/pages/home_page.dart';
+import 'package:coursework_two/services/firebase_service.dart';
 import 'package:coursework_two/state/audio_state.dart';
 import 'package:coursework_two/state/exercise_state.dart';
 import 'package:coursework_two/state/opacity_state.dart';
@@ -14,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
-import 'models/exercise_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
@@ -24,7 +23,7 @@ void main() async {
   );
   await FirebaseAuth.instance.signInAnonymously();
 
-  var exerciseState = ExerciseState(await getExercises());
+  var exerciseState = ExerciseState(await FirebaseService().getExercises());
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => SettingsState()),
     ChangeNotifierProvider(create: (context) => exerciseState),
@@ -55,14 +54,4 @@ class MyApp extends StatelessWidget {
           '/editExercise': (context) => const EditExercisePage()
         });
   }
-}
-
-Future<List<ExerciseModel>> getExercises() async {
-  CollectionReference _exercisesRef =
-      FirebaseFirestore.instance.collection('exercises');
-  QuerySnapshot querySnapshot = await _exercisesRef.orderBy('sequence').get();
-
-  return querySnapshot.docs
-      .map((doc) => ExerciseModel.fromJson(doc.data() as Map<String, dynamic>))
-      .toList();
 }

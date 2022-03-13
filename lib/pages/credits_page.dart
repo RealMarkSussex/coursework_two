@@ -1,9 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coursework_two/components/sun_salutations_app_bar.dart';
 import 'package:coursework_two/models/credit_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../services/firebase_service.dart';
 
 class CreditsPage extends StatelessWidget {
   const CreditsPage({Key? key}) : super(key: key);
@@ -11,7 +12,7 @@ class CreditsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<CreditModel>>(
-        future: getCredits(),
+        future: FirebaseService().getCredits(),
         builder: (context, snapshot) {
           var credits = snapshot.data!;
           return Scaffold(
@@ -43,15 +44,5 @@ class CreditsPage extends StatelessWidget {
             ),
           );
         });
-  }
-
-  Future<List<CreditModel>> getCredits() async {
-    CollectionReference _creditsRef =
-        FirebaseFirestore.instance.collection('credits');
-    QuerySnapshot querySnapshot = await _creditsRef.get();
-
-    return querySnapshot.docs
-        .map((doc) => CreditModel.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/exercise_model.dart';
+import '../services/firebase_service.dart';
 import '../state/exercise_state.dart';
 
 class EditExercisePage extends StatefulWidget {
@@ -17,7 +18,7 @@ class _EditExercisePageState extends State<EditExercisePage> {
   final _formKey = GlobalKey<FormState>();
   static const spacing = 20.0;
   String document = "";
-  final Map<String, dynamic> _editExerciseForm = <String, String>{
+  final Map<String, String> _editExerciseForm = <String, String>{
     'process': '',
     'precaution': '',
     'benefits': '',
@@ -166,31 +167,11 @@ class _EditExercisePageState extends State<EditExercisePage> {
   }
 
   Future<void> submitForm(ExerciseState exerciseState) async {
-    CollectionReference exercises =
-        FirebaseFirestore.instance.collection('exercises');
     if (_formKey.currentState!.validate()) {
-      await exercises.doc(document).update({
-        'process': _editExerciseForm['process'],
-        'precaution': _editExerciseForm['precaution'],
-        'benefits': _editExerciseForm['benefits'],
-        'breathing': _editExerciseForm['breathing'],
-        'audio': _editExerciseForm['audio'],
-        'image': _editExerciseForm['image'],
-      });
+      FirebaseService().updateExercise(_editExerciseForm, document);
 
-      exerciseState.exercises = await getExercises();
+      exerciseState.exercises = await FirebaseService().getExercises();
       Navigator.pop(context);
     }
-  }
-
-  Future<List<ExerciseModel>> getExercises() async {
-    CollectionReference _exercisesRef =
-        FirebaseFirestore.instance.collection('exercises');
-    QuerySnapshot querySnapshot = await _exercisesRef.orderBy('sequence').get();
-
-    return querySnapshot.docs
-        .map(
-            (doc) => ExerciseModel.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
   }
 }

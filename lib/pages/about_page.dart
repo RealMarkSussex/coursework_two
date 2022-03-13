@@ -1,5 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coursework_two/models/about_model.dart';
+import 'package:coursework_two/services/firebase_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -13,7 +13,7 @@ class AboutPage extends StatelessWidget {
     const nameSize = 20.0;
     const textSize = 18.0;
     return FutureBuilder<AboutModel>(
-        future: getAboutModel(),
+        future: FirebaseService().getAboutModel(),
         builder: (BuildContext context, AsyncSnapshot<AboutModel> snapshot) {
           var data = snapshot.data;
           return Scaffold(
@@ -102,16 +102,5 @@ class AboutPage extends StatelessWidget {
                         ])
                   : const SizedBox.shrink());
         });
-  }
-
-  Future<AboutModel> getAboutModel() async {
-    CollectionReference _appInformationRef =
-        FirebaseFirestore.instance.collection('app_information');
-    // Get docs from collection reference
-    DocumentSnapshot documentSnapshot =
-        await _appInformationRef.doc('about').get();
-
-    // Get data from docs and convert map to List
-    return AboutModel.fromJson(documentSnapshot.data() as Map<String, dynamic>);
   }
 }

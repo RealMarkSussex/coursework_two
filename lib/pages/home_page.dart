@@ -1,11 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coursework_two/components/page_card.dart';
 import 'package:coursework_two/components/sun_salutations_app_bar.dart';
 import 'package:coursework_two/dialogs/disclaimer_dialog.dart';
 import 'package:coursework_two/dialogs/level_dialog.dart';
 import 'package:coursework_two/models/card_info_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
+
+import '../services/firebase_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<CardInfoModel>>(
-        future: getCardInfoModel(),
+        future: FirebaseService().getCardInfoModel(),
         builder: (BuildContext context,
             AsyncSnapshot<List<CardInfoModel>> snapshot) {
           var data = snapshot.data;
@@ -42,16 +42,5 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 children: data.map((e) => PageCard(cardInfoModel: e)).toList(),
               )));
         });
-  }
-
-  Future<List<CardInfoModel>> getCardInfoModel() async {
-    CollectionReference _cardInfoRef =
-        FirebaseFirestore.instance.collection('cardInfo');
-    QuerySnapshot querySnapshot = await _cardInfoRef.get();
-
-    return querySnapshot.docs
-        .map(
-            (doc) => CardInfoModel.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
   }
 }
