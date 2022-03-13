@@ -26,22 +26,6 @@ class _CommentPageState extends State<CommentPage> {
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.start, children: [
               TextFormField(
-                controller: emailController,
-                decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Enter your email'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter some text';
-                  }
-
-                  return null;
-                },
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-              TextFormField(
                 keyboardType: TextInputType.multiline,
                 maxLines: 10,
                 controller: commentController,
@@ -76,7 +60,6 @@ class _CommentPageState extends State<CommentPage> {
 
       final Email email = Email(
         body: commentController.text,
-        subject: emailController.text,
         recipients: ['marksussex6@gmail.com'],
         isHTML: false,
       );

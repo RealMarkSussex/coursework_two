@@ -28,12 +28,8 @@ class ToolBar extends StatelessWidget {
                       FontAwesomeIcons.home,
                       color: Colors.lightGreen,
                     ),
-                    onPressed: () async => await goToHomePage(
-                        context,
-                        audioState,
-                        exerciseState,
-                        progressState,
-                        pageState));
+                    onPressed: () async => await goToHomePage(context,
+                        audioState, exerciseState, progressState, pageState));
               });
             }),
             IconButton(
@@ -49,13 +45,18 @@ class ToolBar extends StatelessWidget {
             IconButton(
                 icon: FaIcon(
                   FontAwesomeIcons.angleDoubleRight,
-                  color: !exerciseState.isLastExercise
-                      ? Colors.blue
-                      : Colors.grey,
+                  color:
+                      !exerciseState.isLastExercise ? Colors.blue : Colors.grey,
                 ),
                 onPressed: !exerciseState.isLastExercise
                     ? () => goForward(exerciseState, progressState)
                     : null),
+            IconButton(
+                icon: const FaIcon(
+                  FontAwesomeIcons.pen,
+                  color: Colors.blueGrey,
+                ),
+                onPressed: () => goToExercisePage(context)),
             IconButton(
               icon: const FaIcon(
                 FontAwesomeIcons.question,
@@ -87,6 +88,10 @@ class ToolBar extends StatelessWidget {
     exerciseState.restart();
     progressState.stop();
     Navigator.pushNamed(context, "/");
+  }
+
+  void goToExercisePage(BuildContext context) {
+    Navigator.pushNamed(context, "/editExercise");
   }
 
   void goForward(ExerciseState exerciseState, ProgressState progressState) {
