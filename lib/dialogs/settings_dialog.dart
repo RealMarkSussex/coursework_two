@@ -43,6 +43,20 @@ class SettingsDialog extends StatelessWidget {
                 ),
                 Row(
                   children: [
+                    const Text("Enable breathing cues"),
+                    const SizedBox(
+                      width: SettingsDialog.textSpacing,
+                    ),
+                    Expanded(
+                      child: Switch(
+                          value: settingsState.breathingCuesEnabled,
+                          onChanged: (value) =>
+                              settingsState.breathingCuesEnabled = true),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
                     const Text("Change Volume"),
                     const SizedBox(
                       width: SettingsDialog.textSpacing,

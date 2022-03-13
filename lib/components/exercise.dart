@@ -1,11 +1,10 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:coursework_two/components/interactive_image.dart';
 import 'package:coursework_two/state/audio_state.dart';
 import 'package:coursework_two/state/exercise_state.dart';
 import 'package:coursework_two/state/page_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import '../state/opacity_state.dart';
 import '../state/settings_state.dart';
 
 class Exercise extends StatefulWidget {
@@ -16,6 +15,8 @@ class Exercise extends StatefulWidget {
 }
 
 class _ExerciseState extends State<Exercise> {
+  static const headingFontSize = 20.0;
+
   @override
   Widget build(BuildContext context) {
     return Consumer<ExerciseState>(builder: (context, exerciseState, child) {
@@ -27,13 +28,34 @@ class _ExerciseState extends State<Exercise> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    Center(
+                      child: Consumer<OpacityState>(
+                          builder: (context, opacityState, child) {
+                        return Consumer<SettingsState>(
+                            builder: (context, settingsState, child) {
+                          return settingsState.breathingCuesEnabled
+                              ? AnimatedOpacity(
+                                  opacity: opacityState.opacity,
+                                  duration: const Duration(seconds: 5),
+                                  child: Text(
+                                    exerciseModel.breathing,
+                                    style: const TextStyle(
+                                        fontSize: headingFontSize,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                )
+                              : const SizedBox.shrink();
+                        });
+                      }),
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Center(
                         child: Text(
                           exerciseModel.name,
                           style: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
+                              fontSize: headingFontSize,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -91,5 +113,12 @@ class _ExerciseState extends State<Exercise> {
             .play('audio/${exerciseState.currentExerciseModel.audio}');
       }
     }
+    changeOpacity();
+  }
+
+  void changeOpacity() {
+    Future.delayed(const Duration(seconds: 5), () {
+      Provider.of<OpacityState>(context, listen: false).opacity = 0.0;
+    });
   }
 }
