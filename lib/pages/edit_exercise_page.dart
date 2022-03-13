@@ -3,6 +3,7 @@ import 'package:coursework_two/components/sun_salutations_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../models/exercise_model.dart';
 import '../state/exercise_state.dart';
 
 class EditExercisePage extends StatefulWidget {
@@ -140,7 +141,9 @@ class _EditExercisePageState extends State<EditExercisePage> {
                   ),
                   Flexible(
                       child: ElevatedButton(
-                          onPressed: submitForm, child: const Text("Submit")))
+                          onPressed: () async =>
+                              await submitForm(exerciseState),
+                          child: const Text("Submit")))
                 ],
               ),
             ),
@@ -162,14 +165,32 @@ class _EditExercisePageState extends State<EditExercisePage> {
     _editExerciseForm[key] = value;
   }
 
-  Future<void> submitForm() async {
+  Future<void> submitForm(ExerciseState exerciseState) async {
     CollectionReference exercises =
         FirebaseFirestore.instance.collection('exercises');
     if (_formKey.currentState!.validate()) {
-      await exercises
-          .doc(document)
-          .update({'process': _editExerciseForm['process']});
+      await exercises.doc(document).update({
+        'process': _editExerciseForm['process'],
+        'precaution': _editExerciseForm['precaution'],
+        'benefits': _editExerciseForm['benefits'],
+        'breathing': _editExerciseForm['breathing'],
+        'audio': _editExerciseForm['audio'],
+        'image': _editExerciseForm['image'],
+      });
+
+      exerciseState.exercises = await getExercises();
       Navigator.pop(context);
     }
+  }
+
+  Future<List<ExerciseModel>> getExercises() async {
+    CollectionReference _exercisesRef =
+        FirebaseFirestore.instance.collection('exercises');
+    QuerySnapshot querySnapshot = await _exercisesRef.orderBy('sequence').get();
+
+    return querySnapshot.docs
+        .map(
+            (doc) => ExerciseModel.fromJson(doc.data() as Map<String, dynamic>))
+        .toList();
   }
 }

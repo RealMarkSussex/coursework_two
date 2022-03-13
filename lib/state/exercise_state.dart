@@ -63,4 +63,9 @@ class ExerciseState extends ChangeNotifier {
     _currentExercise = 0;
     notifyListeners();
   }
+
+  set exercises(List<ExerciseModel> value) {
+    _exercises = value;
+    notifyListeners();
+  }
 }

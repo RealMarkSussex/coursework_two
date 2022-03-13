@@ -9,8 +9,10 @@ class SettingsState extends ChangeNotifier {
   TimerSetting _timerSetting = TimerSetting.noTimer;
   SetSetting _setSetting = SetSetting.noSets;
   Level _level = Level.newToYoga;
+  bool _breathingCuesEnabled = false;
 
   bool get audioEnabled => _audioEnabled;
+  bool get breathingCuesEnabled => _breathingCuesEnabled;
   double get volume => _volume;
   TimerSetting get timerSetting => _timerSetting;
   SetSetting get setSetting => _setSetting;
@@ -38,6 +40,11 @@ class SettingsState extends ChangeNotifier {
 
   set level(Level value) {
     _level = value;
+    notifyListeners();
+  }
+
+  set breathingCuesEnabled(bool value) {
+    _breathingCuesEnabled = value;
     notifyListeners();
   }
 }
