@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coursework_two/components/page_card.dart';
 import 'package:coursework_two/components/sun_salutations_app_bar.dart';
+import 'package:coursework_two/dialogs/disclaimer_dialog.dart';
 import 'package:coursework_two/dialogs/level_dialog.dart';
 import 'package:coursework_two/models/card_info_model.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     SchedulerBinding.instance?.addPostFrameCallback((_) {
-      showDialog(context: context, builder: (context) => const LevelDialog());
+      showDialog(
+          context: context, builder: (context) => const DisclaimerDialog());
     });
   }
 

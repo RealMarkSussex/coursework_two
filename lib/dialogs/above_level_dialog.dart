@@ -6,9 +6,9 @@ import '../pages/exercises_page.dart';
 import '../state/exercise_state.dart';
 import '../state/page_state.dart';
 
-class AboveLevel extends StatelessWidget {
+class AboveLevelDialog extends StatelessWidget {
   final String exerciseType;
-  const AboveLevel({Key? key, required this.exerciseType}) : super(key: key);
+  const AboveLevelDialog({Key? key, required this.exerciseType}) : super(key: key);
   static const textSpacing = 20.0;
 
   @override

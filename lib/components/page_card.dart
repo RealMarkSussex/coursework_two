@@ -1,4 +1,4 @@
-import 'package:coursework_two/dialogs/above_level.dart';
+import 'package:coursework_two/dialogs/above_level_dialog.dart';
 import 'package:coursework_two/pages/exercises_page.dart';
 import 'package:coursework_two/models/card_info_model.dart';
 import 'package:coursework_two/state/exercise_state.dart';
@@ -69,7 +69,7 @@ class PageCard extends StatelessWidget {
     if (!cardInfoModel
         .getSuitability()
         .contains(settings.level.toModel().description)) {
-      showDialog(context: context, builder: (context) => AboveLevel(exerciseType: cardInfoModel.name));
+      showDialog(context: context, builder: (context) => AboveLevelDialog(exerciseType: cardInfoModel.name));
     } else {
       exerciseState.exerciseType = cardInfoModel.name;
       pageState.isOnExercisePage = true;
