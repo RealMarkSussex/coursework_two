@@ -1,4 +1,5 @@
 import 'package:coursework_two/dialogs/level_dialog.dart';
+import 'package:coursework_two/services/firebase_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -40,7 +41,11 @@ class DisclaimerDialog extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextButton(
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () => onIDontLikeThisPressed(context),
+                      child: const Text('I do not like this!'),
+                    ),
+                    TextButton(
+                      onPressed: () => onOkPressed(context),
                       child: const Text('Ok'),
                     )
                   ],
@@ -49,5 +54,15 @@ class DisclaimerDialog extends StatelessWidget {
             ),
           ),
         ]);
+  }
+
+  Future<void> onOkPressed(BuildContext context) async {
+    await FirebaseService().storeConsentForUser(true, "disclaimer");
+    Navigator.pop(context);
+  }
+
+  Future<void> onIDontLikeThisPressed(BuildContext context) async {
+    await FirebaseService().storeConsentForUser(false, "disclaimer");
+    Navigator.pop(context);
   }
 }

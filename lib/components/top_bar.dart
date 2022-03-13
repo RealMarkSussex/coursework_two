@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:coursework_two/enums/set_setting.dart';
 import 'package:coursework_two/enums/timer_setting.dart';
+import 'package:coursework_two/services/firebase_service.dart';
 import 'package:coursework_two/state/progress_state.dart';
 import 'package:coursework_two/state/settings_state.dart';
 import 'package:flutter/material.dart';
@@ -49,20 +50,23 @@ class TopBar extends StatelessWidget {
     var delayTime = settingsState.timerSetting.toInt();
     progressState.setsLeft = settingsState.setSetting.toInt();
     progressState.delayTimer = Timer.periodic(Duration(seconds: (delayTime)),
-        (Timer t) => {timerFunction(exerciseState, progressState)});
+        (Timer t) async => {await timerFunction(exerciseState, progressState)});
   }
 
   void onStopPressed(ProgressState progressState) {
     progressState.stop();
   }
 
-  void timerFunction(ExerciseState exerciseState, ProgressState progressState) {
+  Future<void> timerFunction(
+      ExerciseState exerciseState, ProgressState progressState) async {
     if (!exerciseState.isLastExercise) {
       exerciseState.goForward();
     } else if (progressState.setsLeft > 0) {
       exerciseState.restart();
       progressState.setsLeft--;
+      await FirebaseService().addSetForUser();
     } else {
+      await FirebaseService().addSetForUser();
       progressState.stop();
     }
   }

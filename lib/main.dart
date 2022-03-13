@@ -3,6 +3,7 @@ import 'package:coursework_two/pages/comment_page.dart';
 import 'package:coursework_two/pages/credits_page.dart';
 import 'package:coursework_two/pages/edit_exercise_page.dart';
 import 'package:coursework_two/pages/home_page.dart';
+import 'package:coursework_two/pages/statistics_page.dart';
 import 'package:coursework_two/services/firebase_service.dart';
 import 'package:coursework_two/state/audio_state.dart';
 import 'package:coursework_two/state/exercise_state.dart';
@@ -51,7 +52,8 @@ class MyApp extends StatelessWidget {
           '/about': (context) => const AboutPage(),
           '/comment': (context) => const CommentPage(),
           '/credits': (context) => const CreditsPage(),
-          '/editExercise': (context) => const EditExercisePage()
+          '/editExercise': (context) => const EditExercisePage(),
+          '/statistics': (context) => const StatisticsPage()
         });
   }
 }

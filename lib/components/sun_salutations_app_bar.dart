@@ -34,6 +34,12 @@ AppBar createAppBar(String title, BuildContext context) {
           tooltip: 'Credits',
           onPressed: () {
             Navigator.pushNamed(context, '/credits');
+          }),
+      IconButton(
+          icon: const FaIcon(FontAwesomeIcons.chartLine),
+          tooltip: 'Statistics',
+          onPressed: () {
+            Navigator.pushNamed(context, '/statistics');
           })
     ],
   );
