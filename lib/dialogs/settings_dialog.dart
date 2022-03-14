@@ -1,3 +1,4 @@
+import 'package:coursework_two/dialogs/set_info_dialog.dart';
 import 'package:coursework_two/dialogs/timer_info_dialog.dart';
 import 'package:coursework_two/enums/set_setting.dart';
 import 'package:coursework_two/enums/timer_setting.dart';
@@ -89,7 +90,7 @@ class SettingsDialog extends StatelessWidget {
                             settingsState.timerSetting = value!),
                   ),
                   IconButton(
-                    onPressed: () => openHelp(context),
+                    onPressed: () => openTimerInfo(context),
                     icon: const FaIcon(
                       FontAwesomeIcons.infoCircle,
                       color: Colors.amber,
@@ -116,6 +117,13 @@ class SettingsDialog extends StatelessWidget {
                           onChanged: (value) =>
                               settingsState.setSetting = value!),
                     ),
+                    IconButton(
+                      onPressed: () => openSetInfo(context),
+                      icon: const FaIcon(
+                        FontAwesomeIcons.infoCircle,
+                        color: Colors.amber,
+                      ),
+                    )
                   ],
                 ),
                 Row(
@@ -165,11 +173,19 @@ class SettingsDialog extends StatelessWidget {
     }
   }
 
-  void openHelp(BuildContext context) {
+  void openTimerInfo(BuildContext context) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return const TimerInfoDialog();
+        });
+  }
+
+  void openSetInfo(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return const SetInfoDialog();
         });
   }
 }
