@@ -104,6 +104,7 @@ class _ExerciseState extends State<Exercise> {
     var exerciseState = Provider.of<ExerciseState>(context, listen: false);
     var audioState = Provider.of<AudioState>(context, listen: false);
     var pageState = Provider.of<PageState>(context, listen: false);
+    changeOpacity();
 
     if (settingsState.audioEnabled && pageState.isOnExercisePage) {
       if (exerciseState.currentExerciseModel.audio == "-") {
@@ -113,7 +114,6 @@ class _ExerciseState extends State<Exercise> {
             .play('audio/${exerciseState.currentExerciseModel.audio}');
       }
     }
-    changeOpacity();
   }
 
   void changeOpacity() {

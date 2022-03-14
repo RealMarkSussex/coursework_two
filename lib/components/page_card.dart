@@ -6,6 +6,7 @@ import 'package:coursework_two/state/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:coursework_two/enums/level.dart';
+import '../state/opacity_state.dart';
 import '../state/page_state.dart';
 
 class PageCard extends StatelessWidget {
@@ -38,23 +39,28 @@ class PageCard extends StatelessWidget {
           ),
           Consumer<ExerciseState>(builder: (context, exerciseState, child) {
             return Consumer<PageState>(builder: (context, pageState, child) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            primary: Colors.lightGreen),
-                        onPressed: () =>
-                            {openExercises(context, exerciseState, pageState)},
-                        child: const Text(
-                          "Start",
-                          style: TextStyle(fontSize: buttonFontSize),
-                        )),
-                  ),
-                ],
-              );
+              return Consumer<OpacityState>(
+                  builder: (context, opacityState, child) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              primary: Colors.lightGreen),
+                          onPressed: () => {
+                                openExercises(context, exerciseState, pageState,
+                                    opacityState)
+                              },
+                          child: const Text(
+                            "Start",
+                            style: TextStyle(fontSize: buttonFontSize),
+                          )),
+                    ),
+                  ],
+                );
+              });
             });
           })
         ],
@@ -62,17 +68,21 @@ class PageCard extends StatelessWidget {
     );
   }
 
-  void openExercises(
-      BuildContext context, ExerciseState exerciseState, PageState pageState) {
+  void openExercises(BuildContext context, ExerciseState exerciseState,
+      PageState pageState, OpacityState opacityState) {
     var settings = Provider.of<SettingsState>(context, listen: false);
 
     if (!cardInfoModel
         .getSuitability()
         .contains(settings.level.toModel().description)) {
-      showDialog(context: context, builder: (context) => AboveLevelDialog(exerciseType: cardInfoModel.name));
+      showDialog(
+          context: context,
+          builder: (context) =>
+              AboveLevelDialog(exerciseType: cardInfoModel.name));
     } else {
       exerciseState.exerciseType = cardInfoModel.name;
       pageState.isOnExercisePage = true;
+      opacityState.opacity = 1.0;
       Navigator.of(context).push(MaterialPageRoute(builder: (context) {
         return const ExercisesPage();
       }));
