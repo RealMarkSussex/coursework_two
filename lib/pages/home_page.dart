@@ -22,21 +22,23 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) async {
       var firebaseService = FirebaseService();
-      if (await firebaseService.getConsentForUser() == null) {
+      var consent = await firebaseService.getConsentForUser();
+      var userLevel = await firebaseService.getLevelForUser();
+
+      if (consent == null) {
         showDialog(
-                context: context,
-                builder: (context) => const DisclaimerDialog())
-            .then((value) => showDialog(
-                context: context, builder: (context) => const LevelDialog()));
+            context: context,
+            builder: (context) => const DisclaimerDialog()).then((value) {
+          if (userLevel == null) {
+            showDialog(
+                context: context, builder: (context) => const LevelDialog());
+          }
+        });
+      } else if (userLevel == null) {
+        showDialog(context: context, builder: (context) => const LevelDialog());
       } else {
-        var userLevel = await firebaseService.getLevelForUser();
-        if (userLevel == null) {
-          showDialog(
-              context: context, builder: (context) => const LevelDialog());
-        } else {
-          var settingsState = Provider.of<SettingsState>(context);
-          settingsState.level = userLevel;
-        }
+        var settingsState = Provider.of<SettingsState>(context, listen: false);
+        settingsState.level = userLevel;
       }
     });
   }
