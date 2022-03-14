@@ -30,7 +30,7 @@ AppBar createAppBar(String title, BuildContext context) {
             Navigator.pushNamed(context, '/comment');
           }),
       IconButton(
-          icon: const FaIcon(FontAwesomeIcons.creditCard),
+          icon: const FaIcon(FontAwesomeIcons.handshake),
           tooltip: 'Credits',
           onPressed: () {
             Navigator.pushNamed(context, '/credits');
