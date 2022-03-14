@@ -1,5 +1,6 @@
 enum TimerSetting {
   noTimer,
+  tenSeconds,
   twentySeconds,
   fourtySeconds,
   oneMinute,
@@ -10,6 +11,7 @@ extension Parser on TimerSetting {
   int toInt() {
     var timerMappings = <TimerSetting, int>{
       TimerSetting.noTimer: 0,
+      TimerSetting.tenSeconds: 10,
       TimerSetting.twentySeconds: 20,
       TimerSetting.fourtySeconds: 40,
       TimerSetting.oneMinute: 60,
@@ -23,6 +25,8 @@ extension Parser on TimerSetting {
     return [
       TimerSettingModel(
           timerSetting: TimerSetting.noTimer, description: "No timer"),
+      TimerSettingModel(
+          timerSetting: TimerSetting.tenSeconds, description: "10 seconds"),
       TimerSettingModel(
           timerSetting: TimerSetting.twentySeconds, description: "20 Seconds"),
       TimerSettingModel(
