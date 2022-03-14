@@ -7,7 +7,7 @@ class SettingsState extends ChangeNotifier {
   bool _audioEnabled = true;
   double _volume = 0.5;
   TimerSetting _timerSetting = TimerSetting.noTimer;
-  SetSetting _setSetting = SetSetting.noSets;
+  SetSetting _setSetting = SetSetting.oneSet;
   Level _level = Level.newToYoga;
   bool _breathingCuesEnabled = false;
 

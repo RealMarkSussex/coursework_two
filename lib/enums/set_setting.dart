@@ -1,5 +1,5 @@
 enum SetSetting {
-  noSets,
+  oneSet,
   fourSets,
   eigtSets,
   twelveSets,
@@ -14,7 +14,7 @@ enum SetSetting {
 extension Parser on SetSetting {
   int toInt() {
     var numberOfSetsMapping = <SetSetting, int>{
-      SetSetting.noSets: 0,
+      SetSetting.oneSet: 1,
       SetSetting.fourSets: 4,
       SetSetting.eigtSets: 8,
       SetSetting.twelveSets: 12,
@@ -31,7 +31,7 @@ extension Parser on SetSetting {
 
   List<SetSettingModel> toList() {
     return [
-      SetSettingModel(setSetting: SetSetting.noSets, description: "No sets"),
+      SetSettingModel(setSetting: SetSetting.oneSet, description: "1 set"),
       SetSettingModel(setSetting: SetSetting.fourSets, description: "4 sets"),
       SetSettingModel(setSetting: SetSetting.eigtSets, description: "8 sets"),
       SetSettingModel(

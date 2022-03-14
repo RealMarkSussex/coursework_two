@@ -62,6 +62,9 @@ class TopBar extends StatelessWidget {
     if (!exerciseState.isLastExercise) {
       exerciseState.goForward();
     } else if (progressState.setsLeft > 0) {
+      if (progressState.setsLeft == 1) {
+        progressState.stop();
+      }
       exerciseState.restart();
       progressState.setsLeft--;
       await FirebaseService().addSetForUser();

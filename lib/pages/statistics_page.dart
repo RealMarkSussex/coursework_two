@@ -16,6 +16,8 @@ class StatisticsPage extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               var data = snapshot.data!;
+              data.sort((setModelOne, setModelTwo) =>
+                  setModelOne.date.compareTo(setModelTwo.date));
               List<charts.Series<dynamic, String>> series = [
                 charts.Series(
                     id: "Sets",
