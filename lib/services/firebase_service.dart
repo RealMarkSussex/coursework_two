@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:uuid/uuid.dart';
 
+import '../enums/level.dart';
 import '../models/about_model.dart';
 import '../models/card_info_model.dart';
 import '../models/credit_model.dart';
@@ -68,9 +69,50 @@ class FirebaseService {
     CollectionReference _consentsRef =
         FirebaseFirestore.instance.collection('consents');
     FirebaseAuth auth = FirebaseAuth.instance;
-    await _consentsRef
+    await _consentsRef.doc(auth.currentUser?.uid).set({'consented': consented});
+  }
+
+  Future<void> storeLevelForUser(Level level) async {
+    CollectionReference _levelsRef =
+        FirebaseFirestore.instance.collection('levels');
+    FirebaseAuth auth = FirebaseAuth.instance;
+    await _levelsRef
         .doc(auth.currentUser?.uid)
-        .set({'consented': consented, 'consentType': consentType});
+        .set({'level': level.toModel().description});
+  }
+
+  Future<Level?> getLevelForUser() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    DocumentSnapshot _levelRef = await FirebaseFirestore.instance
+        .collection('levels')
+        .doc(auth.currentUser?.uid)
+        .get();
+    if (_levelRef.exists) {
+      var data = _levelRef.data()! as Map<String, dynamic>;
+      return Level.newToYoga
+          .toList()
+          .firstWhere(
+              (element) => element.description == (data["level"] as String))
+          .level;
+    }
+
+    return null;
+  }
+
+  Future<bool?> getConsentForUser() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    DocumentSnapshot _consentRef = await FirebaseFirestore.instance
+        .collection('consents')
+        .doc(auth.currentUser?.uid)
+        .get();
+
+    if (_consentRef.exists) {
+      var data = _consentRef.data()! as Map<String, dynamic>;
+      return data["consented"] as bool;
+    }
+    return null;
   }
 
   Future<void> addSetForUser() async {
@@ -88,7 +130,8 @@ class FirebaseService {
     });
 
     if (doc.isNotEmpty) {
-      var numberOfSets = (doc.first.data()! as Map<String, dynamic>)["numberOfSets"] as int;
+      var numberOfSets =
+          (doc.first.data()! as Map<String, dynamic>)["numberOfSets"] as int;
       await _setsDoneRef
           .doc(doc.first.id)
           .set({'uid': uid, 'date': date, 'numberOfSets': numberOfSets + 1});

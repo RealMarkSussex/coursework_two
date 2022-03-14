@@ -2,6 +2,7 @@ import 'package:coursework_two/dialogs/set_info_dialog.dart';
 import 'package:coursework_two/dialogs/timer_info_dialog.dart';
 import 'package:coursework_two/enums/set_setting.dart';
 import 'package:coursework_two/enums/timer_setting.dart';
+import 'package:coursework_two/services/firebase_service.dart';
 import 'package:coursework_two/state/audio_state.dart';
 import 'package:coursework_two/state/exercise_state.dart';
 import 'package:coursework_two/state/settings_state.dart';
@@ -142,7 +143,8 @@ class SettingsDialog extends StatelessWidget {
                                     value: levelModel.level,
                                   ))
                               .toList(),
-                          onChanged: (value) => settingsState.level = value!),
+                          onChanged: (value) async =>
+                              await changeLevel(settingsState, value!)),
                     ),
                   ],
                 )
@@ -158,6 +160,11 @@ class SettingsDialog extends StatelessWidget {
       SettingsState settingsState, AudioState audioState, double value) {
     settingsState.volume = value;
     audioState.setVolume(value);
+  }
+
+  Future<void> changeLevel(SettingsState settingsState, Level value) async {
+    settingsState.level = value;
+    await FirebaseService().storeLevelForUser(value);
   }
 
   void changeAudioPreference(SettingsState settingsState, AudioState audioState,

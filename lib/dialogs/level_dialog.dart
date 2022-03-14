@@ -1,3 +1,4 @@
+import 'package:coursework_two/services/firebase_service.dart';
 import 'package:coursework_two/state/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -31,6 +32,7 @@ class LevelDialog extends StatelessWidget {
           (levelModel) => TextButton(
             onPressed: () => {
               settingsState.level = levelModel.level,
+              FirebaseService().storeLevelForUser(levelModel.level),
               Navigator.pop(context)
             },
             child: Text(levelModel.description),

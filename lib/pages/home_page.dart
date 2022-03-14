@@ -4,8 +4,10 @@ import 'package:coursework_two/dialogs/disclaimer_dialog.dart';
 import 'package:coursework_two/dialogs/level_dialog.dart';
 import 'package:coursework_two/models/card_info_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../services/firebase_service.dart';
+import '../state/settings_state.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -18,11 +20,24 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      showDialog(
-              context: context, builder: (context) => const DisclaimerDialog())
-          .then((value) => showDialog(
-              context: context, builder: (context) => const LevelDialog()));
+    WidgetsBinding.instance?.addPostFrameCallback((_) async {
+      var firebaseService = FirebaseService();
+      if (await firebaseService.getConsentForUser() == null) {
+        showDialog(
+                context: context,
+                builder: (context) => const DisclaimerDialog())
+            .then((value) => showDialog(
+                context: context, builder: (context) => const LevelDialog()));
+      } else {
+        var userLevel = await firebaseService.getLevelForUser();
+        if (userLevel == null) {
+          showDialog(
+              context: context, builder: (context) => const LevelDialog());
+        } else {
+          var settingsState = Provider.of<SettingsState>(context);
+          settingsState.level = userLevel;
+        }
+      }
     });
   }
 
